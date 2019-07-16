@@ -49,6 +49,7 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
             if(endpointUrls.get("nodes") != null){
                 collectNodeMetrics(server, endpointUrls.get("nodes") );
             }
+            collectClusterMetrics(server, endpointUrls.get("cluster"));
         }
         else{
             LOGGER.info("Please provide connection properties in connection section");
@@ -70,8 +71,8 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
             Map<String, String> UIDToDbNameMap = constructUIDToDbNameMapping(nodeDataJson, databaseNames);
             for (Map.Entry<String, String> uidDbName : UIDToDbNameMap.entrySet()) {
                 String dbStatsEndpointUrl = dbNamesEndpointUrl + "/stats/last/" + uidDbName.getKey();
-                MetricCollectorTask task = new MetricCollectorTask(server.get("displayName").toString(), uidDbName, dbStatsEndpointUrl,
-                        monitorContextConfiguration, metricWriteHelper, "dbMetrics");
+                MetricCollectorTask task = new MetricCollectorTask(server.get("displayName").toString(), dbStatsEndpointUrl, uidDbName.getKey(), uidDbName.getValue(),
+                        monitorContextConfiguration, metricWriteHelper, "dbMetrics" );
                 monitorContextConfiguration.getContext().getExecutorService().execute(" db task - " + uidDbName.getValue(), task);
             }
         }
@@ -109,8 +110,8 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
             Map<String, String> nodeIPAddressUIDMap = constructUIDToNodeIPAddressMapping(nodeDataJson, nodeNames);
             for (Map.Entry<String, String> UIDNodeIPAddress : nodeIPAddressUIDMap.entrySet()) {
                 String nodeStatsEndpointUrl = nodesEndpointUrl + "/stats/last/" + UIDNodeIPAddress.getKey();
-                MetricCollectorTask task = new MetricCollectorTask(server.get("displayName").toString(), UIDNodeIPAddress, nodeStatsEndpointUrl,
-                        monitorContextConfiguration, metricWriteHelper, "nodeMetrics");
+                MetricCollectorTask task = new MetricCollectorTask(server.get("displayName").toString(),nodeStatsEndpointUrl, UIDNodeIPAddress.getKey(), UIDNodeIPAddress.getValue(),
+                        monitorContextConfiguration, metricWriteHelper, "nodeMetrics" );
                 monitorContextConfiguration.getContext().getExecutorService().execute(" node task - " + UIDNodeIPAddress.getValue(), task);
             }
         }
@@ -132,6 +133,13 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
             }
         }
         return UIDToNodeIPAddressMap;
+    }
+
+    private void collectClusterMetrics (Map<String,?> server, String clusterEndpointUrl) {
+        String clusterStatsEndpointUrl = clusterEndpointUrl + "/stats/last";
+        MetricCollectorTask task = new MetricCollectorTask(server.get("displayName").toString(), clusterStatsEndpointUrl, server.get("displayName").toString(), server.get("displayName").toString(),
+                monitorContextConfiguration, metricWriteHelper, "clusterMetrics" );
+        monitorContextConfiguration.getContext().getExecutorService().execute(" cluster task - " + server.get("displayName").toString(), task);
     }
 
     private Map<String, String> buildConnectionUrl (Map<String, String> connectionProperties){

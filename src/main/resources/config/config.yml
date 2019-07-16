@@ -56,7 +56,12 @@ nodeMetrics:
   metric2:
 
 clusterMetrics:
-  metric1:
+  available_memory:
+    props:
+     alias: ""
+     timeRollUp: ""
+     clusterRollUp: ""
+
   metrc2:
 
 encryptionKey: "myKey"
