@@ -8,6 +8,8 @@
 package com.appdynamics.extensions.redis_enterprise;
 import com.appdynamics.extensions.ABaseMonitor;
 import com.appdynamics.extensions.TasksExecutionServiceProvider;
+import com.appdynamics.extensions.conf.MonitorContextConfiguration;
+import com.appdynamics.extensions.redis_enterprise.config.Stats;
 import com.appdynamics.extensions.redis_enterprise.utils.Constants;
 import com.appdynamics.extensions.util.AssertUtils;
 import com.google.common.collect.Maps;
@@ -40,10 +42,18 @@ public class RedisEnterpriseMonitor extends ABaseMonitor {
     }
 
     @Override
+    protected void initializeMoreStuff (Map<String, String> args) {
+        this.getContextConfiguration().setMetricXml(args.get("metrics-file"), Stats.class);
+    }
+
+    @Override
     protected void doRun (TasksExecutionServiceProvider tasksExecutionServiceProvider) {
         List<Map<String, ?>> servers =  getServers();
+        MonitorContextConfiguration monitorContextConfiguration = this.getContextConfiguration();
+        Map<String, String> connectionMap =  (Map<String, String>)this.getContextConfiguration().getConfigYml().get("connection");
+
         for (Map<String, ?> server : servers) {
-            RedisEnterpriseMonitorTask task = new RedisEnterpriseMonitorTask(tasksExecutionServiceProvider.getMetricWriteHelper(), this.getContextConfiguration(),server);
+            RedisEnterpriseMonitorTask task = new RedisEnterpriseMonitorTask(tasksExecutionServiceProvider.getMetricWriteHelper(), this.getContextConfiguration(),server, connectionMap);
             AssertUtils.assertNotNull(server.get(Constants.DISPLAY_NAME), "The displayName can not be null");
             tasksExecutionServiceProvider.submit(server.get(Constants.DISPLAY_NAME).toString(), task);
         }
@@ -66,6 +76,7 @@ public class RedisEnterpriseMonitor extends ABaseMonitor {
         RedisEnterpriseMonitor monitor = new RedisEnterpriseMonitor();
         final Map<String, String> taskArgs = Maps.newHashMap();
         taskArgs.put("config-file", "/Users/vishaka.sekar/AppDynamics/redis-enterprise-monitoring-extension/src/main/resources/config/config.yml");
+        taskArgs.put("metrics-file", "/Users/vishaka.sekar/AppDynamics/redis-enterprise-monitoring-extension/src/main/resources/config/metrics.xml");
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(new Runnable() {
             public void run() {

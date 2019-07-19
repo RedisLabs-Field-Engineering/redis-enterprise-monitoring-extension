@@ -127,6 +127,8 @@
 
                                     <fileset dir="src/main/resources/config" includes="config.yml"/>
                                     <fileset dir="src/main/resources/config" includes="monitor.xml"/>
+                                    <fileset dir="src/main/resources/config" includes="metrics.xml"/>
+
 
                                 </copy>
                                 <copy todir="${target.dir}">

@@ -9,14 +9,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * @author: {Vishaka Sekar} on {7/14/19}
  */
-public class MetricCollectorTask implements Runnable{
+public class MetricCollectorTask implements Runnable {
 
     private static final Logger LOGGER = ExtensionsLoggerFactory.getLogger(MetricCollectorTask.class);
     private MonitorContextConfiguration monitorContextConfiguration;
@@ -25,53 +24,58 @@ public class MetricCollectorTask implements Runnable{
     private String statsEndpointUrl;
     private MetricWriteHelper metricWriteHelper;
     private String serverName;
-    private String metricType;
+    private com.appdynamics.extensions.redis_enterprise.config.Metric[] metrics;
 
-    public MetricCollectorTask (String displayName, String statsEndpointUrl,String uid, String name,
-                                MonitorContextConfiguration monitorContextConfiguration, MetricWriteHelper metricWriteHelper, String metricType) {
-       this.uid = uid;
-       this.name = name;
-       this.statsEndpointUrl = statsEndpointUrl;
-       this.monitorContextConfiguration = monitorContextConfiguration;
-       this.metricWriteHelper = metricWriteHelper;
-       this.serverName = displayName;
-       this.metricType = metricType;
+
+    public MetricCollectorTask (String displayName, String statsEndpointUrl, String uid, String name,
+                                MonitorContextConfiguration monitorContextConfiguration, MetricWriteHelper metricWriteHelper, com.appdynamics.extensions.redis_enterprise.config.Metric[] metrics) {
+        this.uid = uid;
+        this.name = name;
+        this.statsEndpointUrl = statsEndpointUrl;
+        this.monitorContextConfiguration = monitorContextConfiguration;
+        this.metricWriteHelper = metricWriteHelper;
+        this.serverName = displayName;
+        this.metrics = metrics;
     }
 
     @Override
+
     public void run () {
         //todo: null checks
         //todo: logging
         CloseableHttpClient httpClient = monitorContextConfiguration.getContext().getHttpClient();
-        Map<String, String> metrics = null;
-        if(!metricType.equalsIgnoreCase("clusterMetrics")) {
-            metrics = (LinkedHashMap<String, String>) HttpClientUtils.getResponseAsJson(httpClient, statsEndpointUrl, HashMap.class).get(uid);
+        Map<String, String> metricsApiResponse = null;
+
+        if(!uid.isEmpty()) {
+            metricsApiResponse = (HashMap<String, String>) HttpClientUtils.getResponseAsJson(httpClient, statsEndpointUrl + uid, HashMap.class).get(uid);
         }
-        else if(metricType.equalsIgnoreCase("clusterMetrics")){
-             metrics = (HashMap<String, String>) HttpClientUtils.getResponseAsJson(httpClient, statsEndpointUrl, HashMap.class);
+        else{
+            metricsApiResponse = (HashMap<String, String>) HttpClientUtils.getResponseAsJson(httpClient, statsEndpointUrl, HashMap.class);
         }
-        List<Metric> metricsList = extractMetricsFromApiResponse(metrics, metricType);
+        List<Metric> metricsList = extractMetricsFromApiResponse(metricsApiResponse);
+
         metricWriteHelper.transformAndPrintMetrics(metricsList);
     }
 
-    private List<Metric> extractMetricsFromApiResponse (Map<String,String> metrics, String metricType) {
+    private List<Metric> extractMetricsFromApiResponse (Map<String, String> metricsApiResponse) {
         List<Metric> metricList = Lists.newArrayList();
         String[] metricPathTokens = null;
         String metricPrefix = null;
-        if(!metricType.equalsIgnoreCase("clusterMetrics")) {
-            metricPrefix = monitorContextConfiguration.getMetricPrefix() + "|" + serverName + "|" + name;
-        }
-        else if(metricType.equalsIgnoreCase("clusterMetrics")){
-            metricPrefix = monitorContextConfiguration.getMetricPrefix() + "|" + serverName;
-        }
-        Map<String, Map<String, ?>> metricsFromConfig = (Map<String, Map<String, ?>>) monitorContextConfiguration.getConfigYml().get(metricType);
-        for (Map.Entry metricFromRedis : metrics.entrySet()) {
-            if (metricsFromConfig.containsKey(metricFromRedis.getKey())) {
-                LOGGER.debug("Processing metric {} of metricType {} ", metricFromRedis.getKey(), metricType);
-                metricPathTokens = metricFromRedis.getKey().toString().split("\\|");
-                Metric metric = new Metric(metricFromRedis.getKey().toString(), metricFromRedis.getValue().toString(),
-                        metricsFromConfig.get(metricFromRedis.getKey()), metricPrefix, metricPathTokens);
-                metricList.add(metric);
+        metricPrefix = monitorContextConfiguration.getMetricPrefix() + "|" + serverName + "|" + name;
+        for (Map.Entry metricFromRedis : metricsApiResponse.entrySet()) {
+            for (com.appdynamics.extensions.redis_enterprise.config.Metric metricFromConfig : metrics) {
+                if (metricFromConfig.getAttr().equals(metricFromRedis.getKey())) {
+                    LOGGER.debug("Processing metric [{}] ", metricFromConfig.getAttr());
+                    metricPathTokens = metricFromRedis.getKey().toString().split("\\|");
+                    Map<String, Object> props = new HashMap<>();
+                    props.put("aggregationType", metricFromConfig.getAggregationType());
+                    props.put("clusterRollUpType", metricFromConfig.getClusterRollUpType());
+                    props.put("timeRollUpType", metricFromConfig.getTimeRollUpType());
+                    props.put("alias", metricFromConfig.getAlias()); //todo: convert
+                    Metric metric = new Metric(metricFromRedis.getKey().toString(), metricFromRedis.getValue().toString(),
+                            props, metricPrefix, metricPathTokens);
+                    metricList.add(metric);
+                }
             }
         }
         return metricList;
