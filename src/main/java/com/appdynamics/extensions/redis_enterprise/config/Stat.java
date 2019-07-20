@@ -1,4 +1,6 @@
 package com.appdynamics.extensions.redis_enterprise.config;
+import com.appdynamics.extensions.redis_enterprise.utils.Constants;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -13,19 +15,19 @@ public class Stat {
     @XmlAttribute
     private String alias;
 
-    @XmlElement(name = "metric")
+    @XmlElement(name = Constants.METRIC)
     private Metric[] metric;
 
-    @XmlAttribute(name = "statsUrl")
+    @XmlAttribute(name = Constants.STATS_URL)
     private String statsUrl;
 
-    @XmlAttribute(name = "name")
+    @XmlAttribute(name = Constants.NAME)
     private String name;
 
-    @XmlAttribute(name = "key")
+    @XmlAttribute(name = Constants.KEY)
     private String key;
 
-    @XmlAttribute(name = "url")
+    @XmlAttribute(name = Constants.URL)
     private String url;
 
     public Metric[] getMetric () {
@@ -34,7 +36,9 @@ public class Stat {
 
     public void setMetric (Metric[] metric) {
         this.metric = metric;
-    }public String getAlias () {
+    }
+
+    public String getAlias () {
         return alias;
     }
 
@@ -54,6 +58,10 @@ public class Stat {
         return statsUrl;
     }
 
+    public void setStatsUrl (String statsUrl) {
+        this.statsUrl = statsUrl;
+    }
+
     public String getName () {
         return name;
     }
@@ -69,11 +77,4 @@ public class Stat {
     public void setKey (String key) {
         this.key = key;
     }
-
-    public void setStatsUrl (String statsUrl) {
-        this.statsUrl = statsUrl;
-
-    }
-
-
 }

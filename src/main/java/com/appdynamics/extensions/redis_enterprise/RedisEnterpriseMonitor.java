@@ -8,7 +8,6 @@
 package com.appdynamics.extensions.redis_enterprise;
 import com.appdynamics.extensions.ABaseMonitor;
 import com.appdynamics.extensions.TasksExecutionServiceProvider;
-import com.appdynamics.extensions.conf.MonitorContextConfiguration;
 import com.appdynamics.extensions.redis_enterprise.config.Stats;
 import com.appdynamics.extensions.redis_enterprise.utils.Constants;
 import com.appdynamics.extensions.util.AssertUtils;
@@ -49,11 +48,9 @@ public class RedisEnterpriseMonitor extends ABaseMonitor {
     @Override
     protected void doRun (TasksExecutionServiceProvider tasksExecutionServiceProvider) {
         List<Map<String, ?>> servers =  getServers();
-        MonitorContextConfiguration monitorContextConfiguration = this.getContextConfiguration();
-        Map<String, String> connectionMap =  (Map<String, String>)this.getContextConfiguration().getConfigYml().get("connection");
 
         for (Map<String, ?> server : servers) {
-            RedisEnterpriseMonitorTask task = new RedisEnterpriseMonitorTask(tasksExecutionServiceProvider.getMetricWriteHelper(), this.getContextConfiguration(),server, connectionMap);
+            RedisEnterpriseMonitorTask task = new RedisEnterpriseMonitorTask(tasksExecutionServiceProvider.getMetricWriteHelper(), this.getContextConfiguration(),server);
             AssertUtils.assertNotNull(server.get(Constants.DISPLAY_NAME), "The displayName can not be null");
             tasksExecutionServiceProvider.submit(server.get(Constants.DISPLAY_NAME).toString(), task);
         }

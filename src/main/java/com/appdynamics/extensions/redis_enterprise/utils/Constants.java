@@ -11,4 +11,14 @@ public class Constants {
     public static final String SERVERS = "servers";
 
     public static final String DISPLAY_NAME = "displayName";
+    public static final String URI = "uri";
+    public static final String DISPLAY_NAME = "displayName";
+    public static final String STR = "str";
+    public static final String VALUE = "value";
+    public static final String METRIC = "metric";
+    public static final String STATS_URL = "statsUrl";
+    public static final String NAME = "name";
+    public static final String KEY = "key";
+    public static final String URL = "url";
+    public static final String STAT = "stat";
 }

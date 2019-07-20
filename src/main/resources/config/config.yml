@@ -18,16 +18,16 @@ servers:
         node: ['172.17.0.2']
         shard: ['3']
 
-#    - uri: 'https://localhost:9449'
-#      username: 'fake@appdynamics.com'
-#      password: 'fake@123'
-#      encryptedPassword: ''
-#      useSSL: 'true'
-#      displayName: 'FakeClsuter'
-#      objects:
-#        database: ['test']
-#        node: ['172.17.0.2']
-#        shard: ['3']
+    - uri: 'https://localhost:9449'
+      username: 'fake@appdynamics.com'
+      password: 'fake@123'
+      encryptedPassword: ''
+      useSSL: 'true'
+      displayName: 'FakeClsuter'
+      objects:
+        database: ['test']
+        node: ['172.17.0.2']
+        shard: ['3']
 
 connection:
   socketTimeout: 5000 # Read Timeout

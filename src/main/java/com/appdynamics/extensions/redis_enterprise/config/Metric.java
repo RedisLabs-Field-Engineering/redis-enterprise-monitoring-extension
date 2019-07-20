@@ -1,7 +1,5 @@
 package com.appdynamics.extensions.redis_enterprise.config;
 import com.google.common.collect.Maps;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -15,7 +13,6 @@ import java.util.Map;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Metric {
-    public static final Logger logger = LoggerFactory.getLogger(Metric.class);
 
     @XmlAttribute
     private String attr;
@@ -38,93 +35,92 @@ public class Metric {
     @XmlAttribute
     private BigDecimal multiplier;
 
-    @XmlElement(name="isBoolean")
-    private String isBoolean= "false";
+    @XmlElement(name = "isBoolean")
+    private String isBoolean = "false";
 
     @XmlElement(name = "convert")
     private MetricConverter[] convert;
 
-
-    public String getAttr() {
+    public String getAttr () {
         return attr;
     }
 
-    public void setAttr(String attr) {
+    public void setAttr (String attr) {
         this.attr = attr;
     }
 
-    public String getAlias() {
+    public String getAlias () {
         return alias;
     }
 
-    public void setAlias(String alias) {
+    public void setAlias (String alias) {
         this.alias = alias;
     }
 
-    public BigDecimal getMultiplier() {
+    public BigDecimal getMultiplier () {
         return multiplier;
     }
 
-    public void setMultiplier(BigDecimal multiplier) {
+    public void setMultiplier (BigDecimal multiplier) {
         this.multiplier = multiplier;
     }
 
-    public String isBoolean() {
+    public String isBoolean () {
         return isBoolean;
     }
 
-    public void setBoolean(String isBoolean) {
+    public void setBoolean (String isBoolean) {
         this.isBoolean = isBoolean;
     }
 
-    public String getDelta() {
+    public String getDelta () {
         return delta;
     }
 
-    public void setDelta(String delta) {
+    public void setDelta (String delta) {
         this.delta = delta;
     }
 
-    public String getAggregationType() {
+    public String getAggregationType () {
         return aggregationType;
     }
 
-    public void setAggregationType(String aggregationType) {
+    public void setAggregationType (String aggregationType) {
         this.aggregationType = aggregationType;
     }
 
-    public String getTimeRollUpType() {
+    public String getTimeRollUpType () {
         return timeRollUpType;
     }
 
-    public void setTimeRollUpType(String timeRollUpType) {
+    public void setTimeRollUpType (String timeRollUpType) {
         this.timeRollUpType = timeRollUpType;
     }
 
-    public String getClusterRollUpType() {
+    public String getClusterRollUpType () {
         return clusterRollUpType;
     }
 
-    public void setClusterRollUpType(String clusterRollUpType) {
+    public void setClusterRollUpType (String clusterRollUpType) {
         this.clusterRollUpType = clusterRollUpType;
     }
 
-    public Map<String, String> getConvert() {
+    public Map<String, String> getConvert () {
         Map<String, String> converterMap = Maps.newHashMap();
-        if(convert!= null && convert.length > 0) {
+        if (convert != null && convert.length > 0) {
             return generateConverterMap(converterMap);
         }
         return converterMap;
     }
 
-    private Map<String, String> generateConverterMap(Map<String, String> converterMap) {
-        for(MetricConverter converter : convert) {
+    private Map<String, String> generateConverterMap (Map<String, String> converterMap) {
+        for (MetricConverter converter : convert) {
             converterMap.put(converter.getLabel(), converter.getValue());
         }
         return converterMap;
     }
 
-    public void setConvert(MetricConverter[] convert) {
+    public void setConvert (MetricConverter[] convert) {
         this.convert = convert;
     }
 }
