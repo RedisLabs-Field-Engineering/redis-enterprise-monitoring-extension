@@ -63,6 +63,7 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
                 return 1;
             } else if (statusLine.getStatusCode() != 200) {
                 HttpClientUtils.printError(closeableHttpResponse, server.get(Constants.URI).toString() + "/v1/");
+                return 0;
             }
         } catch (IOException e) {
             LOGGER.info("Cannot connect to Cluster {} {}. Not collecting metrics", server.get(Constants.DISPLAY_NAME), e);
@@ -80,10 +81,10 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
 
     private void collectMetrics (String displayName, String uri, String metricType, List<String> names) {
         //TODO: phaser
-        //todo: response status code
+
         //todo: response null check
         //todo: logging
-        //todo: constants
+
         Stats stats = (Stats) configuration.getMetricsXml();
         Stat[] stat = stats.getStat();
         for (Stat statistic : stat) {
@@ -99,36 +100,42 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
                 ArrayNode nodeDataJson;
                 String url = uri + statistic.getUrl();
                 nodeDataJson = HttpClientUtils.getResponseAsJson(this.configuration.getContext().getHttpClient(), url, ArrayNode.class);
-                Map<String, String> keyToNameMap = constructKeyToNameMapping(nodeDataJson, names, statistic.getKey(), statistic.getName());
-                for (Map.Entry<String, String> keyToName : keyToNameMap.entrySet()) {
-                    MetricCollectorTask task = new MetricCollectorTask(displayName, statsUrl, keyToName.getKey(), keyToName.getValue(),
+                Map<String, String> IDtoNameMap = findUidOfObjectNames(nodeDataJson, names, statistic.getId(), statistic.getName());
+
+                for (Map.Entry<String, String> IDNamePair : IDtoNameMap.entrySet()) {
+                    LOGGER.debug("Starting metric collection for {} {} with id {}", statistic.getAlias(), IDNamePair.getValue(), IDNamePair.getKey());
+                    MetricCollectorTask task = new MetricCollectorTask(displayName, statsUrl, IDNamePair.getKey(), IDNamePair.getValue(),
                             configuration, metricWriteHelper, statistic.getMetric());
-                    configuration.getContext().getExecutorService().execute(statistic.getAlias() + " task - " + keyToName.getValue(), task);
+                    configuration.getContext().getExecutorService().execute(statistic.getAlias() + " task - " + IDNamePair.getValue(), task);
                 }
 
             } else if (names.isEmpty() && statistic.getUrl().isEmpty()) {
-                MetricCollectorTask task = new MetricCollectorTask(displayName, statsUrl, statistic.getKey(), statistic.getName(),
+                MetricCollectorTask task = new MetricCollectorTask(displayName, statsUrl, statistic.getId(), statistic.getName(),
                         configuration, metricWriteHelper, statistic.getMetric());
                 configuration.getContext().getExecutorService().execute(" cluster task - ", task);
             }
         }
     }
 
-    private Map<String, String> constructKeyToNameMapping (ArrayNode nodeDataJson, List<String> objectNames, String key, String name) {
+    private Map<String, String> findUidOfObjectNames (ArrayNode nodeDataJson, List<String> objectNames, String id, String statNameFromMetricsXml) {
         Map<String, String> keyToNameMap = new HashMap<>();
-        for (String node : objectNames) {
+        for (String objectName : objectNames) {
             for (JsonNode jsonNode : nodeDataJson) {
-                if (jsonNode.get(name).getTextValue().equals(node)) {
-                    if (jsonNode.get(key).isTextual()) {
-                        keyToNameMap.put(jsonNode.get(key).getTextValue(), jsonNode.get(name).getTextValue());
-                    } else
-                        keyToNameMap.put(jsonNode.get(key).toString(), jsonNode.get(name).getTextValue());
+                if (isObjectNameInConfigYml(statNameFromMetricsXml, objectName, jsonNode)) {
+                    String key = jsonNode.get(id).isTextual() ? jsonNode.get(id).getTextValue() : jsonNode.get(id).toString();
+                    String value = jsonNode.get(statNameFromMetricsXml).isTextual() ? jsonNode.get(statNameFromMetricsXml).getTextValue() : jsonNode.get(statNameFromMetricsXml).toString();
+                    keyToNameMap.put(key, value);
+
                 } else {
-                    LOGGER.info("Database {} not found in Redis Enterprise", node);
+                    LOGGER.info("Object [{}] not found in Redis Enterprise Cluster - [{}]", objectName, server.get(Constants.DISPLAY_NAME));
                 }
             }
         }
         return keyToNameMap;
+    }
+
+    private boolean isObjectNameInConfigYml (String name, String objectName, JsonNode jsonNode) {
+        return jsonNode.get(name).getTextValue().equals(objectName);
     }
 
     @Override

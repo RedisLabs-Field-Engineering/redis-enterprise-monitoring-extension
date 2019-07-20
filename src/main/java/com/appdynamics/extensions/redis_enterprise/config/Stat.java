@@ -24,8 +24,8 @@ public class Stat {
     @XmlAttribute(name = Constants.NAME)
     private String name;
 
-    @XmlAttribute(name = Constants.KEY)
-    private String key;
+    @XmlAttribute(name = Constants.ID)
+    private String id;
 
     @XmlAttribute(name = Constants.URL)
     private String url;
@@ -70,11 +70,11 @@ public class Stat {
         this.name = name;
     }
 
-    public String getKey () {
-        return key;
+    public String getId () {
+        return id;
     }
 
-    public void setKey (String key) {
-        this.key = key;
+    public void setId (String id) {
+        this.id = id;
     }
 }

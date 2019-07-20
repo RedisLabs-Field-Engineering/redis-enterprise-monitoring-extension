@@ -1,7 +1,7 @@
 <stats>
 
 
-    <stat alias="database" url = "/v1/bdbs" statsUrl = "/v1/bdbs/stats/last/"  key = "uid" name= "name">
+    <stat alias="database" url = "/v1/bdbs" statsUrl = "/v1/bdbs/stats/last/"  id = "uid" name= "name">
         <metric attr="conns" alias="Erlang Processes" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
         <!--<metric attr="evicted_objects" alias="avl memory" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>-->
         <!--<metric attr="mem_alarm" alias="Memory Free Alarm Activated" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>-->
@@ -15,7 +15,7 @@
 
     </stat>
 
-    <stat alias="node" url = "/v1/nodes" statsUrl = "/v1/nodes/stats/last/"  key = "uid" name= "addr">
+    <stat alias="node" url = "/v1/nodes" statsUrl = "/v1/nodes/stats/last/"  id = "uid" name= "addr">
     <metric attr="conns" alias="Erlang Processes" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
     <!--<metric attr="evicted_objects" alias="avl memory" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>-->
     <!--<metric attr="mem_alarm" alias="Memory Free Alarm Activated" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>-->
@@ -29,11 +29,11 @@
 
     </stat>
 
-    <stat alias="shard" url = "/v1/shards" statsUrl = "/v1/shards/stats/last/"  key = "uid" name= "uid" >
+    <stat alias="shard" url = "/v1/shards" statsUrl = "/v1/shards/stats/last/"  id = "uid" name= "uid" >
         <metric attr="connected_clients" alias="Cluster COnn" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
     </stat>
 
-    <stat alias="cluster"   url = "" statsUrl = "/v1/cluster/stats/last"  key = "" name= ""  >
+    <stat alias="cluster"   url = "" statsUrl = "/v1/cluster/stats/last"  id = "" name= ""  >
         <metric attr="available_flash" alias="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
         <!--<metric attr="disk_free_alarm" alias="Disk Free Alarm Activated" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>-->
         <!--<metric attr="mem_alarm" alias="Memory Free Alarm Activated" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>-->
