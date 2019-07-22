@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Phaser;
 
 /**
  * @author: {Vishaka Sekar} on {7/14/19}
@@ -25,9 +26,10 @@ public class MetricCollectorTask implements Runnable {
     private final MetricWriteHelper metricWriteHelper;
     private final String serverName;
     private com.appdynamics.extensions.redis_enterprise.config.Metric[] metrics;
+    Phaser phaser;
 
     public MetricCollectorTask (String displayName, String statsEndpointUrl, String uid, String objectName,
-                                MonitorContextConfiguration monitorContextConfiguration, MetricWriteHelper metricWriteHelper, com.appdynamics.extensions.redis_enterprise.config.Metric[] metrics) {
+                                MonitorContextConfiguration monitorContextConfiguration, MetricWriteHelper metricWriteHelper, com.appdynamics.extensions.redis_enterprise.config.Metric[] metrics, Phaser phaser) {
         this.uid = uid;
         this.objectName = objectName;
         this.statsEndpointUrl = statsEndpointUrl;
@@ -35,24 +37,28 @@ public class MetricCollectorTask implements Runnable {
         this.metricWriteHelper = metricWriteHelper;
         this.serverName = displayName;
         this.metrics = metrics;
+        this.phaser = phaser;
     }
 
     @Override
 
     public void run () {
-        //todo: null checks
-        //todo: logging
+
+        phaser.register();
         CloseableHttpClient httpClient = monitorContextConfiguration.getContext().getHttpClient();
         Map<String, String> metricsApiResponse;
 
         if(!uid.isEmpty()) {
+            LOGGER.debug("Extracting metrics for [{}] ", statsEndpointUrl + uid);
             metricsApiResponse = (HashMap<String, String>) HttpClientUtils.getResponseAsJson(httpClient, statsEndpointUrl + uid, HashMap.class).get(uid);
         }
         else{
+            LOGGER.debug("Extracting metrics for [{}] ", statsEndpointUrl);
             metricsApiResponse = (HashMap<String, String>) HttpClientUtils.getResponseAsJson(httpClient, statsEndpointUrl, HashMap.class);
         }
         List<Metric> metricsList = extractMetricsFromApiResponse(metricsApiResponse);
         metricWriteHelper.transformAndPrintMetrics(metricsList);
+        phaser.arriveAndDeregister();
     }
 
     private List<Metric> extractMetricsFromApiResponse (Map<String, String> metricsApiResponse) {

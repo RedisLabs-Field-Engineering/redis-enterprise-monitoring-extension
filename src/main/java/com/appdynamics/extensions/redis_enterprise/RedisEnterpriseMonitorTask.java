@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Phaser;
 
 /**
  * @author: {Vishaka Sekar} on {7/11/19}
@@ -30,6 +31,7 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
     private final MonitorContextConfiguration configuration;
     private final Map<String, ?> server;
     private final MetricWriteHelper metricWriteHelper;
+    private Phaser phaser;
 
     RedisEnterpriseMonitorTask ( MetricWriteHelper metricWriteHelper, MonitorContextConfiguration configuration, Map<String, ?> server) {
         this.configuration = configuration;
@@ -39,6 +41,9 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
 
     @Override
     public void run () {
+        phaser = new Phaser();
+        phaser.register();
+
         int heartBeat = getConnectionStatus(server);
         metricWriteHelper.printMetric(configuration.getMetricPrefix() + "|" + server.get(Constants.DISPLAY_NAME).toString() + "|" + "Connection Status", String.valueOf(heartBeat), "AVERAGE", "AVERAGE", "INDIVIDUAL");
         if (heartBeat == 1) {
@@ -46,7 +51,7 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
             String uri = server.get(Constants.URI).toString();
             String displayName = server.get(Constants.DISPLAY_NAME).toString();
             for (Map.Entry object : objects.entrySet()) {
-                LOGGER.info("Starting metric collection for server {}", displayName);
+                LOGGER.info("Starting metric collection for object [{}] on server [{}]", object.getKey(),displayName);
                 if(!((List<String>) object.getValue()).isEmpty()) {
                     collectStatMetrics(displayName, uri, object.getKey().toString(), (List<String>) object.getValue());
                 }else{
@@ -54,7 +59,9 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
                 }
             }
             collectStatMetrics(displayName, uri, "cluster", Lists.newArrayList());
+            LOGGER.debug("Finished all metrics collection for {}", displayName);
         }
+        phaser.arriveAndAwaitAdvance();
     }
 
     private int getConnectionStatus (Map<String, ?> server) {
@@ -84,12 +91,7 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
     }
 
     private void collectStatMetrics (String displayName, String uri, String objectType, List<String> names) {
-        //TODO: phaser
-
-        //todo: response null check
-        //todo: logging
-
-        Stats stats = (Stats) configuration.getMetricsXml();
+     Stats stats = (Stats) configuration.getMetricsXml();
         Stat[] stat = stats.getStat();
         for (Stat statistic : stat) {
             collectMetrics(displayName, uri, objectType, names, statistic);
@@ -109,14 +111,14 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
                 for (Map.Entry<String, String> IDObjectNamePair : IDtoObjectNameMap.entrySet()) {
                     LOGGER.debug("Starting metric collection for {} {} with id {}", statistic.getType(), IDObjectNamePair.getValue(), IDObjectNamePair.getKey());
                     MetricCollectorTask task = new MetricCollectorTask(displayName, statsUrl, IDObjectNamePair.getKey(), IDObjectNamePair.getValue(),
-                            configuration, metricWriteHelper, statistic.getMetric());
+                            configuration, metricWriteHelper, statistic.getMetric(),phaser);
                     configuration.getContext().getExecutorService().execute(statistic.getType() + " task - " + IDObjectNamePair.getValue(), task);
                 }
 
             } else if (names.isEmpty() && statistic.getUrl().isEmpty()) {
                 LOGGER.debug("Starting cluster metric collection for {} ",displayName);
                 MetricCollectorTask task = new MetricCollectorTask(displayName, statsUrl, statistic.getId(), statistic.getName(),
-                        configuration, metricWriteHelper, statistic.getMetric());
+                        configuration, metricWriteHelper, statistic.getMetric(), phaser);
                 configuration.getContext().getExecutorService().execute(" cluster task - ", task);
             }
         }
@@ -144,6 +146,6 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
 
     @Override
     public void onTaskComplete () {
-        //TODO:  and logging
+        LOGGER.info("All tasks for host {} finished", server.get(Constants.DISPLAY_NAME));
     }
 }

@@ -15,9 +15,9 @@
 
     </stat>
 
-    <!--<stat type="node" url = "/v1/nodes" statsUrl = "/v1/nodes/stats/last/" id = "uid" name= "addr">-->
-    <!--<metric attr="conns" type="Erlang Processes" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>-->
-    <!--<metric attr="evicted_objects" type="avl memory" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>-->
+    <stat type="node" url = "/v1/nodes" statsUrl = "/v1/nodes/stats/last/" id = "uid" name= "addr">
+    <metric attr="conns" type="Erlang Processes" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+    <metric attr="evicted_objects" type="avl memory" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
     <!--<metric attr="mem_alarm" type="Memory Free Alarm Activated" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>-->
     <!--<metric attr="fd_used" type="File Descriptors" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>-->
     <!--<metric attr="mem_used" type="Memory(MB)" multiplier="9.54e-7" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>-->
@@ -27,11 +27,11 @@
     <!--<metric attr="summary_channels" type="Summary|Channels" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>-->
     <!--<metric attr="consumers" type="Summary|Consumers" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>-->
 
-    <!--</stat>-->
+    </stat>
 
-    <!--<stat type="shard" url = "/v1/shards" statsUrl = "/v1/shards/stats/last/" id = "uid" name= "uid" >-->
-        <!--<metric attr="connected_clients" type="Cluster COnn" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>-->
-    <!--</stat>-->
+    <stat type="shard" url = "/v1/shards" statsUrl = "/v1/shards/stats/last/" id = "uid" name= "uid" >
+        <metric attr="connected_clients" type="Cluster COnn" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+    </stat>
 
     <stat type="cluster" url = "" statsUrl = "/v1/cluster/stats/last" id = "" name= ""  >
         <metric attr="available_flash" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
