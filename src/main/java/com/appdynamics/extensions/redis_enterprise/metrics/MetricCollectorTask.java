@@ -38,13 +38,14 @@ public class MetricCollectorTask implements Runnable {
         this.serverName = displayName;
         this.metrics = metrics;
         this.phaser = phaser;
+        phaser.register();
     }
 
     @Override
 
     public void run () {
 
-        phaser.register();
+
         CloseableHttpClient httpClient = monitorContextConfiguration.getContext().getHttpClient();
         Map<String, String> metricsApiResponse;
 

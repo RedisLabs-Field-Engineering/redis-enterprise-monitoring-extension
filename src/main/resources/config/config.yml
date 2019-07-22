@@ -18,6 +18,18 @@ servers:
         node: ['172.17.0.2']
         shard: ['3']
 
+    - uri: 'https://localhost:9443'
+      username: 'vishaka.sekar@appdynamics.com'
+      password: 'AppD@123'
+      encryptedPassword: ''
+      useSSL: 'true'
+      displayName: 'myCluster3'
+      objects:
+        database: ['test']
+        node: ['172.17.0.2']
+        shard: ['3']
+
+
     - uri: 'https://localhost:9449'
       username: 'fake@appdynamics.com'
       password: 'fake@123'
@@ -51,7 +63,7 @@ proxy:
 encryptionKey: "myKey"
 
 # numberOfThreads = for each server
-numberOfThreads: 3
+numberOfThreads: 20
 
 #metricPathReplacements:
 #   - replace: "_"
