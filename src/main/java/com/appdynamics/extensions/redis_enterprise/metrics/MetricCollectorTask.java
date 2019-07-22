@@ -20,16 +20,16 @@ public class MetricCollectorTask implements Runnable {
     private static final Logger LOGGER = ExtensionsLoggerFactory.getLogger(MetricCollectorTask.class);
     private final MonitorContextConfiguration monitorContextConfiguration;
     private final String uid;
-    private final String name;
+    private final String objectName;
     private final String statsEndpointUrl;
     private final MetricWriteHelper metricWriteHelper;
     private final String serverName;
-    private final com.appdynamics.extensions.redis_enterprise.config.Metric[] metrics;
+    private com.appdynamics.extensions.redis_enterprise.config.Metric[] metrics;
 
-    public MetricCollectorTask (String displayName, String statsEndpointUrl, String uid, String name,
+    public MetricCollectorTask (String displayName, String statsEndpointUrl, String uid, String objectName,
                                 MonitorContextConfiguration monitorContextConfiguration, MetricWriteHelper metricWriteHelper, com.appdynamics.extensions.redis_enterprise.config.Metric[] metrics) {
         this.uid = uid;
-        this.name = name;
+        this.objectName = objectName;
         this.statsEndpointUrl = statsEndpointUrl;
         this.monitorContextConfiguration = monitorContextConfiguration;
         this.metricWriteHelper = metricWriteHelper;
@@ -38,14 +38,17 @@ public class MetricCollectorTask implements Runnable {
     }
 
     @Override
+
     public void run () {
         //todo: null checks
         //todo: logging
         CloseableHttpClient httpClient = monitorContextConfiguration.getContext().getHttpClient();
         Map<String, String> metricsApiResponse;
-        if (!uid.isEmpty()) {
+
+        if(!uid.isEmpty()) {
             metricsApiResponse = (HashMap<String, String>) HttpClientUtils.getResponseAsJson(httpClient, statsEndpointUrl + uid, HashMap.class).get(uid);
-        } else {
+        }
+        else{
             metricsApiResponse = (HashMap<String, String>) HttpClientUtils.getResponseAsJson(httpClient, statsEndpointUrl, HashMap.class);
         }
         List<Metric> metricsList = extractMetricsFromApiResponse(metricsApiResponse);
@@ -56,7 +59,7 @@ public class MetricCollectorTask implements Runnable {
         List<Metric> metricList = Lists.newArrayList();
         String[] metricPathTokens;
         String metricPrefix;
-        metricPrefix = monitorContextConfiguration.getMetricPrefix() + "|" + serverName + "|" + name;
+        metricPrefix = monitorContextConfiguration.getMetricPrefix() + "|" + serverName + "|" + objectName;
         for (Map.Entry metricFromRedis : metricsApiResponse.entrySet()) {
             for (com.appdynamics.extensions.redis_enterprise.config.Metric metricFromConfig : metrics) {
                 if (metricFromConfig.getAttr().equals(metricFromRedis.getKey())) {

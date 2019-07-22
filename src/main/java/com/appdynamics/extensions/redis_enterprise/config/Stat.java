@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlElement;
 public class Stat {
 
     @XmlAttribute
-    private String alias;
+    private String type;
 
     @XmlElement(name = Constants.METRIC)
     private Metric[] metric;
@@ -38,12 +38,12 @@ public class Stat {
         this.metric = metric;
     }
 
-    public String getAlias () {
-        return alias;
+    public String getType () {
+        return type;
     }
 
-    public void setAlias (String alias) {
-        this.alias = alias;
+    public void setType (String type) {
+        this.type = type;
     }
 
     public String getUrl () {

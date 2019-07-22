@@ -47,9 +47,13 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
             String displayName = server.get(Constants.DISPLAY_NAME).toString();
             for (Map.Entry object : objects.entrySet()) {
                 LOGGER.info("Starting metric collection for server {}", displayName);
-                collectMetrics(displayName, uri, object.getKey().toString(), (List<String>) object.getValue());
+                if(!((List<String>) object.getValue()).isEmpty()) {
+                    collectStatMetrics(displayName, uri, object.getKey().toString(), (List<String>) object.getValue());
+                }else{
+                    LOGGER.info("No object names of type [{}] found in config.yml", object.getKey());
+                }
             }
-            collectMetrics(displayName, uri, "cluster", Lists.newArrayList());
+            collectStatMetrics(displayName, uri, "cluster", Lists.newArrayList());
         }
     }
 
@@ -79,7 +83,7 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
         return 0;
     }
 
-    private void collectMetrics (String displayName, String uri, String metricType, List<String> names) {
+    private void collectStatMetrics (String displayName, String uri, String objectType, List<String> names) {
         //TODO: phaser
 
         //todo: response null check
@@ -88,28 +92,29 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
         Stats stats = (Stats) configuration.getMetricsXml();
         Stat[] stat = stats.getStat();
         for (Stat statistic : stat) {
-            collectStatMetrics(displayName, uri, metricType, names, statistic);
+            collectMetrics(displayName, uri, objectType, names, statistic);
         }
     }
 
-    private void collectStatMetrics (String displayName, String uri, String metricType, List<String> names, Stat statistic) {
-        if (metricType.equals(statistic.getAlias())) {
+    private void collectMetrics (String displayName, String uri, String objectType, List<String> names, Stat statistic) {
+        if (objectType.equals(statistic.getType())) {
             String statsUrl = uri + statistic.getStatsUrl();
 
             if (!names.isEmpty() && !statistic.getUrl().isEmpty()) {
                 ArrayNode nodeDataJson;
                 String url = uri + statistic.getUrl();
                 nodeDataJson = HttpClientUtils.getResponseAsJson(this.configuration.getContext().getHttpClient(), url, ArrayNode.class);
-                Map<String, String> IDtoNameMap = findUidOfObjectNames(nodeDataJson, names, statistic.getId(), statistic.getName());
+                Map<String, String> IDtoObjectNameMap = findIdOfObjectNames(nodeDataJson, names, statistic.getId(), statistic.getName());
 
-                for (Map.Entry<String, String> IDNamePair : IDtoNameMap.entrySet()) {
-                    LOGGER.debug("Starting metric collection for {} {} with id {}", statistic.getAlias(), IDNamePair.getValue(), IDNamePair.getKey());
-                    MetricCollectorTask task = new MetricCollectorTask(displayName, statsUrl, IDNamePair.getKey(), IDNamePair.getValue(),
+                for (Map.Entry<String, String> IDObjectNamePair : IDtoObjectNameMap.entrySet()) {
+                    LOGGER.debug("Starting metric collection for {} {} with id {}", statistic.getType(), IDObjectNamePair.getValue(), IDObjectNamePair.getKey());
+                    MetricCollectorTask task = new MetricCollectorTask(displayName, statsUrl, IDObjectNamePair.getKey(), IDObjectNamePair.getValue(),
                             configuration, metricWriteHelper, statistic.getMetric());
-                    configuration.getContext().getExecutorService().execute(statistic.getAlias() + " task - " + IDNamePair.getValue(), task);
+                    configuration.getContext().getExecutorService().execute(statistic.getType() + " task - " + IDObjectNamePair.getValue(), task);
                 }
 
             } else if (names.isEmpty() && statistic.getUrl().isEmpty()) {
+                LOGGER.debug("Starting cluster metric collection for {} ",displayName);
                 MetricCollectorTask task = new MetricCollectorTask(displayName, statsUrl, statistic.getId(), statistic.getName(),
                         configuration, metricWriteHelper, statistic.getMetric());
                 configuration.getContext().getExecutorService().execute(" cluster task - ", task);
@@ -117,21 +122,20 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
         }
     }
 
-    private Map<String, String> findUidOfObjectNames (ArrayNode nodeDataJson, List<String> objectNames, String id, String statNameFromMetricsXml) {
-        Map<String, String> keyToNameMap = new HashMap<>();
+    private Map<String, String> findIdOfObjectNames (ArrayNode nodeDataJson, List<String> objectNames, String id, String statNameFromMetricsXml) {
+        Map<String, String> idToObjectNameMap = new HashMap<>();
         for (String objectName : objectNames) {
             for (JsonNode jsonNode : nodeDataJson) {
                 if (isObjectNameInConfigYml(statNameFromMetricsXml, objectName, jsonNode)) {
                     String key = jsonNode.get(id).isTextual() ? jsonNode.get(id).getTextValue() : jsonNode.get(id).toString();
                     String value = jsonNode.get(statNameFromMetricsXml).isTextual() ? jsonNode.get(statNameFromMetricsXml).getTextValue() : jsonNode.get(statNameFromMetricsXml).toString();
-                    keyToNameMap.put(key, value);
-
+                    idToObjectNameMap.put(key, value);
                 } else {
                     LOGGER.info("Object [{}] not found in Redis Enterprise Cluster - [{}]", objectName, server.get(Constants.DISPLAY_NAME));
                 }
             }
         }
-        return keyToNameMap;
+        return idToObjectNameMap;
     }
 
     private boolean isObjectNameInConfigYml (String name, String objectName, JsonNode jsonNode) {

@@ -5,20 +5,16 @@ package com.appdynamics.extensions.redis_enterprise.utils;
 public class Constants {
 
     public static final String DEFAULT_METRIC_PREFIX = "Custom Metrics|Redis Enterprise";
-
     public static final String REDIS_ENTERPRISE = "Redis Enterprise Monitor";
-
     public static final String SERVERS = "servers";
-
     public static final String DISPLAY_NAME = "displayName";
     public static final String URI = "uri";
-    public static final String DISPLAY_NAME = "displayName";
     public static final String STR = "str";
     public static final String VALUE = "value";
     public static final String METRIC = "metric";
     public static final String STATS_URL = "statsUrl";
     public static final String NAME = "name";
-    public static final String ID = "key";
+    public static final String ID = "id";
     public static final String URL = "url";
     public static final String STAT = "stat";
 }
