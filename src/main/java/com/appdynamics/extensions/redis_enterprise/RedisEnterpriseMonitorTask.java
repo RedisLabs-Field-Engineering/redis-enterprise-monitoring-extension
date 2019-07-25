@@ -6,7 +6,7 @@ import com.appdynamics.extensions.http.HttpClientUtils;
 import com.appdynamics.extensions.logging.ExtensionsLoggerFactory;
 import com.appdynamics.extensions.redis_enterprise.config.Stat;
 import com.appdynamics.extensions.redis_enterprise.config.Stats;
-import com.appdynamics.extensions.redis_enterprise.metrics.StatTask;
+import com.appdynamics.extensions.redis_enterprise.metrics.ObjectMetricsCollectorTask;
 import com.appdynamics.extensions.redis_enterprise.utils.Constants;
 import com.google.common.collect.Lists;
 import org.apache.http.StatusLine;
@@ -41,18 +41,21 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
     @Override
     public void run () {
 
+        Map<String, ?> config = configuration.getConfigYml();
         int heartBeat = getConnectionStatus(server);
         metricWriteHelper.printMetric(configuration.getMetricPrefix() + "|" + server.get(Constants.DISPLAY_NAME).toString() + "|" + "Connection Status", String.valueOf(heartBeat), "AVERAGE", "AVERAGE", "INDIVIDUAL");
         if (heartBeat == 1) {
-            Map<String, ?> objects = (Map<String, ?>) server.get("objects");
+            Map<String, ?> objects = (Map<String, ?>) config.get("objects");
             String uri = server.get(Constants.URI).toString();
             String displayName = server.get(Constants.DISPLAY_NAME).toString();
-            for (Map.Entry object : objects.entrySet()) {
-                LOGGER.info("Starting metric collection for object [{}] on server [{}]", object.getKey(), displayName);
-                if (!((List<String>) object.getValue()).isEmpty()) {
-                    collectStatMetrics(displayName, uri, object.getKey().toString(), (List<String>) object.getValue());
-                } else {
-                    LOGGER.info("No object names of type [{}] found in config.yml", object.getKey());
+            if (objects.size() > 0) {
+                for (Map.Entry object : objects.entrySet()) {
+                    LOGGER.info("Starting metric collection for object [{}] on server [{}]", object.getKey(), displayName);
+                    if (!((List<String>) object.getValue()).isEmpty()) {
+                        collectStatMetrics(displayName, uri, object.getKey().toString(), (List<String>) object.getValue());
+                    } else {
+                        LOGGER.info("No object names of type [{}] found in config.yml", object.getKey());
+                    }
                 }
             }
             collectStatMetrics(displayName, uri, "cluster", Lists.newArrayList());
@@ -92,14 +95,12 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
         Stat[] stat = stats.getStat();
         for (Stat statistic : stat) {
             if (objectType.equals(statistic.getType())) {
-                StatTask statTask = new StatTask(displayName, uri, names, statistic, configuration, metricWriteHelper, phaser);
-                configuration.getContext().getExecutorService().execute(statistic.getType() + " task - " , statTask);
+                ObjectMetricsCollectorTask objectMetricsCollectorTask = new ObjectMetricsCollectorTask(displayName, uri, names, statistic, configuration, metricWriteHelper, phaser);
+                configuration.getContext().getExecutorService().execute(statistic.getType() + " task - " , objectMetricsCollectorTask);
             }
 
         }
     }
-
-
 
     @Override
     public void onTaskComplete () {

@@ -16,8 +16,8 @@ import java.util.concurrent.Phaser;
 /**
  * @author: {Vishaka Sekar} on {7/22/19}
  */
-public class StatTask implements  Runnable {
-    private static final Logger LOGGER = ExtensionsLoggerFactory.getLogger(StatTask.class);
+public class ObjectMetricsCollectorTask implements  Runnable {
+    private static final Logger LOGGER = ExtensionsLoggerFactory.getLogger(ObjectMetricsCollectorTask.class);
     MonitorContextConfiguration configuration;
     Stat statistic;
     List<String> objectNames;
@@ -27,7 +27,7 @@ public class StatTask implements  Runnable {
     Phaser phaser;
 
 
-    public StatTask(String displayName, String uri, List<String> objectNames, Stat statistic, MonitorContextConfiguration configuration, MetricWriteHelper metricWriteHelper, Phaser phaser){
+    public ObjectMetricsCollectorTask (String displayName, String uri, List<String> objectNames, Stat statistic, MonitorContextConfiguration configuration, MetricWriteHelper metricWriteHelper, Phaser phaser){
         this.configuration = configuration;
         this.objectNames = objectNames;
         this.statistic = statistic;
@@ -43,29 +43,29 @@ public class StatTask implements  Runnable {
 
         collectMetrics(displayName, uri, objectNames, statistic);
         phaser.arriveAndDeregister();
+
     }
 
-    private void collectMetrics (String displayName, String uri, List<String> names, Stat statistic) {
+    private void collectMetrics (String displayName, String uri, List<String> objectNames, Stat statistic) {
 
             String statsUrl = uri + statistic.getStatsUrl();
-            if (!names.isEmpty() && !statistic.getUrl().isEmpty()) {
+            if (!objectNames.isEmpty() && !statistic.getUrl().isEmpty()) {
                 ArrayNode nodeDataJson;
                 String url = uri + statistic.getUrl();
                 nodeDataJson = HttpClientUtils.getResponseAsJson(this.configuration.getContext().getHttpClient(), url, ArrayNode.class);
-                Map<String, String> IDtoObjectNameMap = findIdOfObjectNames(nodeDataJson, names, statistic.getId(), statistic.getName());
+                Map<String, String> IDtoObjectNameMap = findIdOfObjectNames(nodeDataJson, objectNames, statistic.getId(), statistic.getName());
                 for (Map.Entry<String, String> IDObjectNamePair : IDtoObjectNameMap.entrySet()) {
-                    LOGGER.debug("Starting metric collection for {} {} with id {}", statistic.getType(), IDObjectNamePair.getValue(), IDObjectNamePair.getKey());
-                    MetricCollectorTask task = new MetricCollectorTask(displayName, statsUrl, IDObjectNamePair.getKey(), IDObjectNamePair.getValue(),
+                    LOGGER.debug("Starting metric collection for object {} {} with id {}", statistic.getType(), IDObjectNamePair.getValue(), IDObjectNamePair.getKey());
+                    ObjectMetricsCollectorSubTask task = new ObjectMetricsCollectorSubTask(displayName, statsUrl, IDObjectNamePair.getKey(), IDObjectNamePair.getValue(),
                             configuration, metricWriteHelper, statistic.getMetric(), phaser);
                     configuration.getContext().getExecutorService().execute(statistic.getType() + " task - " + IDObjectNamePair.getValue(), task);
                 }
-            } else if (names.isEmpty() && statistic.getUrl().isEmpty()) {
+            } else if (objectNames.isEmpty() && statistic.getUrl().isEmpty()) {
                 LOGGER.debug("Starting cluster metric collection for {} ", displayName);
-                MetricCollectorTask task = new MetricCollectorTask(displayName, statsUrl, statistic.getId(), statistic.getName(),
+                ObjectMetricsCollectorSubTask task = new ObjectMetricsCollectorSubTask(displayName, statsUrl, statistic.getId(), statistic.getName(),
                         configuration, metricWriteHelper, statistic.getMetric(), phaser);
                 configuration.getContext().getExecutorService().execute(" cluster task - ", task);
             }
-
     }
 
     private Map<String, String> findIdOfObjectNames (ArrayNode nodeDataJson, List<String> objectNames, String id, String statNameFromMetricsXml) {

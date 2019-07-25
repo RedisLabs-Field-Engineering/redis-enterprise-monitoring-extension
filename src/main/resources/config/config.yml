@@ -13,10 +13,6 @@ servers:
       encryptedPassword: ''
       useSSL: 'true'
       displayName: 'myCluster'
-      objects:
-        database: ['test']
-        node: ['172.17.0.2']
-        shard: ['3']
 
     - uri: 'https://localhost:9443'
       username: 'vishaka.sekar@appdynamics.com'
@@ -24,10 +20,7 @@ servers:
       encryptedPassword: ''
       useSSL: 'true'
       displayName: 'myCluster3'
-      objects:
-        database: ['test']
-        node: ['172.17.0.2']
-        shard: ['3']
+
 
 
     - uri: 'https://localhost:9449'
@@ -36,10 +29,11 @@ servers:
       encryptedPassword: ''
       useSSL: 'true'
       displayName: 'FakeClsuter'
-      objects:
-        database: ['test']
-        node: ['172.17.0.2']
-        shard: ['3']
+
+objects:
+  database: ['test']
+  node: ['172.17.0.2']
+  shard: ['3']
 
 connection:
   socketTimeout: 5000 # Read Timeout
