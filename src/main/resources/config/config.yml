@@ -31,7 +31,7 @@ servers:
       displayName: 'FakeClsuter'
 
 objects:
-  database: ['test']
+  database: ['test','trdt']
   node: ['172.17.0.2']
   shard: ['3']
 

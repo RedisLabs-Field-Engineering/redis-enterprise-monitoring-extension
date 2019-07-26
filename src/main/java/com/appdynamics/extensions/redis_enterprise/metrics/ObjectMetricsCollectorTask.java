@@ -48,8 +48,6 @@ public class ObjectMetricsCollectorTask implements  Runnable {
             String statsUrl = uri + statistic.getStatsUrl();
             if (!objectNames.isEmpty() && !statistic.getUrl().isEmpty()) {
                 collectObjectMetrics(displayName, uri, objectNames, statistic, statsUrl);
-            } else if (objectNames.isEmpty() && statistic.getUrl().isEmpty()) {
-                collectClusterMetrics(displayName, statistic, statsUrl);
             }
     }
 
@@ -59,25 +57,18 @@ public class ObjectMetricsCollectorTask implements  Runnable {
         jsonNodes = HttpClientUtils.getResponseAsJson(this.configuration.getContext().getHttpClient(), url, ArrayNode.class);
         Map<String, String> IDtoObjectNameMap = findIdOfObjectNames(jsonNodes, objectNames, statistic.getId(), statistic.getName());
         for (Map.Entry<String, String> IDObjectNamePair : IDtoObjectNameMap.entrySet()) {
-            LOGGER.debug("Starting metric collection for object {} {} with id {}", statistic.getType(), IDObjectNamePair.getValue(), IDObjectNamePair.getKey());
+            LOGGER.debug("Starting metric collection for object [{}] [{}] with id [{}] in [{}]", statistic.getType(), IDObjectNamePair.getValue(), IDObjectNamePair.getKey(), displayName);
             ObjectMetricsCollectorSubTask task = new ObjectMetricsCollectorSubTask(displayName, statsUrl, IDObjectNamePair.getKey(), IDObjectNamePair.getValue(),
                     configuration, metricWriteHelper, statistic.getMetric(), phaser);
             configuration.getContext().getExecutorService().execute(statistic.getType() + " task - " + IDObjectNamePair.getValue(), task);
         }
     }
 
-    private void collectClusterMetrics (String displayName, Stat statistic, String statsUrl) {
-        LOGGER.debug("Starting cluster metric collection for {} ", displayName);
-        ObjectMetricsCollectorSubTask task = new ObjectMetricsCollectorSubTask(displayName, statsUrl, statistic.getId(), statistic.getName(),
-                configuration, metricWriteHelper, statistic.getMetric(), phaser);
-        configuration.getContext().getExecutorService().execute(" cluster task - ", task);
-    }
-
     private Map<String, String> findIdOfObjectNames (ArrayNode jsonNodes, List<String> objectNames, String id, String statNameFromMetricsXml) {
         Map<String, String> idToObjectNameMap = new HashMap<>();
         for (String objectName : objectNames) {
             for (JsonNode jsonNode : jsonNodes) {
-                if (isObjectNameInConfigYml(statNameFromMetricsXml, objectName, jsonNode)) {
+                if (isObjectFoundInRedis(statNameFromMetricsXml, objectName, jsonNode)) {
                     String key = jsonNode.get(id).isTextual() ? jsonNode.get(id).getTextValue() : jsonNode.get(id).toString();
                     String value = jsonNode.get(statNameFromMetricsXml).isTextual() ? jsonNode.get(statNameFromMetricsXml).getTextValue() : jsonNode.get(statNameFromMetricsXml).toString();
                     idToObjectNameMap.put(key, value);
@@ -89,7 +80,7 @@ public class ObjectMetricsCollectorTask implements  Runnable {
         return idToObjectNameMap;
     }
 
-    private boolean isObjectNameInConfigYml (String name, String objectName, JsonNode jsonNode) {
+    private boolean isObjectFoundInRedis (String name, String objectName, JsonNode jsonNode) {
         return jsonNode.get(name).getTextValue().equals(objectName);
     }
 }

@@ -6,9 +6,9 @@ import com.appdynamics.extensions.http.HttpClientUtils;
 import com.appdynamics.extensions.logging.ExtensionsLoggerFactory;
 import com.appdynamics.extensions.redis_enterprise.config.Stat;
 import com.appdynamics.extensions.redis_enterprise.config.Stats;
+import com.appdynamics.extensions.redis_enterprise.metrics.ClusterMetricsCollectorTask;
 import com.appdynamics.extensions.redis_enterprise.metrics.ObjectMetricsCollectorTask;
 import com.appdynamics.extensions.redis_enterprise.utils.Constants;
-import com.google.common.collect.Lists;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -48,6 +48,8 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
             Map<String, ?> objects = (Map<String, ?>) config.get("objects");
             String uri = server.get(Constants.URI).toString();
             String displayName = server.get(Constants.DISPLAY_NAME).toString();
+
+
             if (objects.size() > 0) {
                 for (Map.Entry object : objects.entrySet()) {
                     LOGGER.info("Starting metric collection for object [{}] on server [{}]", object.getKey(), displayName);
@@ -58,8 +60,8 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
                     }
                 }
             }
-            collectStatMetrics(displayName, uri, "cluster", Lists.newArrayList());
-            LOGGER.debug("Finished all metrics collection for {}", displayName);
+            collectClusterMetrics(displayName, uri);
+
         }
         phaser.arriveAndAwaitAdvance();
     }
@@ -100,6 +102,12 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
             }
 
         }
+    }
+
+    private void collectClusterMetrics (String displayName, String uri){
+        ClusterMetricsCollectorTask clusterMetricsCollectorTask = new ClusterMetricsCollectorTask(displayName, uri, configuration, metricWriteHelper, phaser);
+        configuration.getContext().getExecutorService().execute("ClusterMetricsTask", clusterMetricsCollectorTask);
+        LOGGER.debug("Finished all metrics collection for {}", displayName);
     }
 
     @Override

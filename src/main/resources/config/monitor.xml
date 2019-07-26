@@ -21,9 +21,9 @@
                 <type>java</type>
                 <execution-timeout-in-secs>60</execution-timeout-in-secs>
                 <task-arguments>
-                    <!-- config and metrics file-->
+                    <!-- config and metricsFromConfig file-->
                         <argument name="config-file" is-required="true" default-value="monitors/RedisEnterpriseMonitor/config.yml" />
-                        <argument name="metrics-file" is-required="true" default-value="monitors/RedisEnterpriseMonitor/metrics.xml" />
+                        <argument name="metricsFromConfig-file" is-required="true" default-value="monitors/RedisEnterpriseMonitor/metricsFromConfig.xml" />
                 </task-arguments>
                 <java-task>
                         <classpath>redis-enterprise-monitoring-extension.jar</classpath>
