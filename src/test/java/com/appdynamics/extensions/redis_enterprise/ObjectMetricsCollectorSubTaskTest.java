@@ -16,6 +16,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
@@ -37,7 +38,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
  */
 @RunWith(PowerMockRunner.class)
 @PowerMockIgnore("javax.net.ssl.*")
-@PrepareForTest({HttpClientUtils.class, MetricPathUtils.class})
+@PrepareForTest({HttpClientUtils.class})
 
 public class ObjectMetricsCollectorSubTaskTest {
 
@@ -56,13 +57,12 @@ public class ObjectMetricsCollectorSubTaskTest {
         Map<String, ?> conf = YmlReader.readFromFileAsMap(new File("src/test/resources/config.yml"));
         ABaseMonitor baseMonitor = mock(ABaseMonitor.class);
         MonitorContext context = mock(MonitorContext.class);
-        PowerMockito.mockStatic(MetricPathUtils.class);
-        when(baseMonitor.getContextConfiguration()).thenReturn(configuration);
-        when(baseMonitor.getContextConfiguration().getContext()).thenReturn(context);
+        Mockito.when(baseMonitor.getContextConfiguration()).thenReturn(configuration);
+        Mockito.when(baseMonitor.getContextConfiguration().getContext()).thenReturn(context);
         MetricPathUtils.registerMetricCharSequenceReplacer(baseMonitor);
         MetricCharSequenceReplacer replacer = MetricCharSequenceReplacer.createInstance(conf);
-        when(context.getMetricCharSequenceReplacer()).thenReturn(replacer);
-        when(configuration.getMetricPrefix()).thenReturn(metricPrefix);
+        Mockito.when(context.getMetricCharSequenceReplacer()).thenReturn(replacer);
+        Mockito.when(configuration.getMetricPrefix()).thenReturn(metricPrefix);
         phaser.register();
     }
 
@@ -90,7 +90,6 @@ public class ObjectMetricsCollectorSubTaskTest {
         metrics[0] = metric;
         ObjectMetricsCollectorSubTask objectMetricsCollectorSubTask = new ObjectMetricsCollectorSubTask(displayName, url, uid, objectName, configuration, metricWriteHelper, metrics, phaser);
         objectMetricsCollectorSubTask.run();
-
     }
 
 

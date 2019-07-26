@@ -40,10 +40,8 @@ public class ObjectMetricsCollectorTask implements  Runnable {
 
     @Override
     public void run () {
-
         collectMetrics(displayName, uri, objectNames, statistic);
         phaser.arriveAndDeregister();
-
     }
 
     private void collectMetrics (String displayName, String uri, List<String> objectNames, Stat statistic) {
@@ -54,6 +52,7 @@ public class ObjectMetricsCollectorTask implements  Runnable {
                 String url = uri + statistic.getUrl();
                 nodeDataJson = HttpClientUtils.getResponseAsJson(this.configuration.getContext().getHttpClient(), url, ArrayNode.class);
                 Map<String, String> IDtoObjectNameMap = findIdOfObjectNames(nodeDataJson, objectNames, statistic.getId(), statistic.getName());
+
                 for (Map.Entry<String, String> IDObjectNamePair : IDtoObjectNameMap.entrySet()) {
                     LOGGER.debug("Starting metric collection for object {} {} with id {}", statistic.getType(), IDObjectNamePair.getValue(), IDObjectNamePair.getKey());
                     ObjectMetricsCollectorSubTask task = new ObjectMetricsCollectorSubTask(displayName, statsUrl, IDObjectNamePair.getKey(), IDObjectNamePair.getValue(),
