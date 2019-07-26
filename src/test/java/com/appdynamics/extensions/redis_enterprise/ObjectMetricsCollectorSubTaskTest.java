@@ -45,7 +45,7 @@ public class ObjectMetricsCollectorSubTaskTest {
     MonitorContextConfiguration configuration;
     MetricWriteHelper metricWriteHelper;
     Phaser phaser  = new Phaser();
-    String metricPrefix =  "Custom Metrics|RedisEnterprise";
+    String metricPrefix =  "Custom Metrics|Redis Enterprise";
 
     @Before
     public void setUp(){
@@ -67,7 +67,7 @@ public class ObjectMetricsCollectorSubTaskTest {
     }
 
     @Test
-    public void metricStats(){
+    public void testMetricExtractionFromApiResponseForObjects(){
         String displayName = "myCluster";
         String uid = "3";
         String url = "https://localhost:9443/v1/bdbs/stats/last/3";
@@ -90,6 +90,11 @@ public class ObjectMetricsCollectorSubTaskTest {
         metrics[0] = metric;
         ObjectMetricsCollectorSubTask objectMetricsCollectorSubTask = new ObjectMetricsCollectorSubTask(displayName, url, uid, objectName, configuration, metricWriteHelper, metrics, phaser);
         objectMetricsCollectorSubTask.run();
+    }
+
+    @Test
+    public void testMetricExtractionFromApiResponseForClusters(){
+
     }
 
 
