@@ -29,7 +29,7 @@ public class ObjectMetricsCollectorSubTask implements Runnable {
     private final String serverName;
 
     private com.appdynamics.extensions.redis_enterprise.config.Metric[] metrics;
-    Phaser phaser;
+    private Phaser phaser;
 
     public ObjectMetricsCollectorSubTask (String displayName, String statsEndpointUrl, String uid, String objectName,
                                           MonitorContextConfiguration monitorContextConfiguration, MetricWriteHelper metricWriteHelper, com.appdynamics.extensions.redis_enterprise.config.Metric[] metrics, Phaser phaser) {

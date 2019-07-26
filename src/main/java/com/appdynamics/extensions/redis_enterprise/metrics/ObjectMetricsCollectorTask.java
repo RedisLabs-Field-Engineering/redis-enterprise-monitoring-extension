@@ -18,13 +18,13 @@ import java.util.concurrent.Phaser;
  */
 public class ObjectMetricsCollectorTask implements  Runnable {
     private static final Logger LOGGER = ExtensionsLoggerFactory.getLogger(ObjectMetricsCollectorTask.class);
-    MonitorContextConfiguration configuration;
-    Stat statistic;
-    List<String> objectNames;
-    String displayName;
-    String uri;
-    MetricWriteHelper metricWriteHelper;
-    Phaser phaser;
+    private MonitorContextConfiguration configuration;
+    private Stat statistic;
+    private List<String> objectNames;
+    private String displayName;
+    private String uri;
+    private MetricWriteHelper metricWriteHelper;
+    private Phaser phaser;
 
 
     public ObjectMetricsCollectorTask (String displayName, String uri, List<String> objectNames, Stat statistic, MonitorContextConfiguration configuration, MetricWriteHelper metricWriteHelper, Phaser phaser){
@@ -45,7 +45,6 @@ public class ObjectMetricsCollectorTask implements  Runnable {
     }
 
     private void collectMetrics (String displayName, String uri, List<String> objectNames, Stat statistic) {
-
             String statsUrl = uri + statistic.getStatsUrl();
             if (!objectNames.isEmpty() && !statistic.getUrl().isEmpty()) {
                 collectObjectMetrics(displayName, uri, objectNames, statistic, statsUrl);
@@ -55,10 +54,10 @@ public class ObjectMetricsCollectorTask implements  Runnable {
     }
 
     private void collectObjectMetrics (String displayName, String uri, List<String> objectNames, Stat statistic, String statsUrl) {
-        ArrayNode nodeDataJson;
+        ArrayNode jsonNodes;
         String url = uri + statistic.getUrl();
-        nodeDataJson = HttpClientUtils.getResponseAsJson(this.configuration.getContext().getHttpClient(), url, ArrayNode.class);
-        Map<String, String> IDtoObjectNameMap = findIdOfObjectNames(nodeDataJson, objectNames, statistic.getId(), statistic.getName());
+        jsonNodes = HttpClientUtils.getResponseAsJson(this.configuration.getContext().getHttpClient(), url, ArrayNode.class);
+        Map<String, String> IDtoObjectNameMap = findIdOfObjectNames(jsonNodes, objectNames, statistic.getId(), statistic.getName());
         for (Map.Entry<String, String> IDObjectNamePair : IDtoObjectNameMap.entrySet()) {
             LOGGER.debug("Starting metric collection for object {} {} with id {}", statistic.getType(), IDObjectNamePair.getValue(), IDObjectNamePair.getKey());
             ObjectMetricsCollectorSubTask task = new ObjectMetricsCollectorSubTask(displayName, statsUrl, IDObjectNamePair.getKey(), IDObjectNamePair.getValue(),
@@ -74,10 +73,10 @@ public class ObjectMetricsCollectorTask implements  Runnable {
         configuration.getContext().getExecutorService().execute(" cluster task - ", task);
     }
 
-    private Map<String, String> findIdOfObjectNames (ArrayNode nodeDataJson, List<String> objectNames, String id, String statNameFromMetricsXml) {
+    private Map<String, String> findIdOfObjectNames (ArrayNode jsonNodes, List<String> objectNames, String id, String statNameFromMetricsXml) {
         Map<String, String> idToObjectNameMap = new HashMap<>();
         for (String objectName : objectNames) {
-            for (JsonNode jsonNode : nodeDataJson) {
+            for (JsonNode jsonNode : jsonNodes) {
                 if (isObjectNameInConfigYml(statNameFromMetricsXml, objectName, jsonNode)) {
                     String key = jsonNode.get(id).isTextual() ? jsonNode.get(id).getTextValue() : jsonNode.get(id).toString();
                     String value = jsonNode.get(statNameFromMetricsXml).isTextual() ? jsonNode.get(statNameFromMetricsXml).getTextValue() : jsonNode.get(statNameFromMetricsXml).toString();
