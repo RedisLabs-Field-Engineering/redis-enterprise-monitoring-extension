@@ -1,16 +1,66 @@
 <stats>
 
+    <!--DB Metrics -->
     <stat type="database" url = "/v1/bdbs" statsUrl = "/v1/bdbs/stats/last/" id = "uid" name= "name">
-        <metric attr="conns" type="Erlang Processes" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <!--<metric attr="evicted_objects" type="avl memory" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>-->
-        <!--<metric attr="mem_alarm" type="Memory Free Alarm Activated" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>-->
-        <!--<metric attr="fd_used" type="File Descriptors" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>-->
-        <!--<metric attr="mem_used" type="Memory(MB)" multiplier="9.54e-7" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>-->
-        <!--<metric attr="sockets_used" type="Sockets" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>-->
-        <!--<metric attr="channels_count" type="Channels|Count" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>-->
-        <!--<metric attr="channels_blocked" type="Channels|Blocked" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>-->
-        <!--<metric attr="summary_channels" type="Summary|Channels" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>-->
-        <!--<metric attr="consumers" type="Summary|Consumers" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>-->
+        <metric attr="no_of_keys" type="Number of Keys" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="evicted_objects" type="Evicted Objects" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="expired_objects" type="Expired Objects" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="instantaneous_ops_per_sec" type="Instantaneous Ops/sec" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="read_hits" type="Red Hits" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="read_misses" type="Read Misses" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="write_hits" type="Write Hits" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="write_misses" type="Write Misses" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="pubsub_channels" type="PubSub Channels" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="pubsub_patterns" type="PubSub Patterns" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="mem_frag_ratio" type="RAM Frag Ratio" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="disk_frag_ratio" type="Disk Frag Ratio" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="bigstore_kv_ops" type="Bigstore KV Ops" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="bigstore_iops" type="Bigstore IO ops" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="bigstore_throughput" type="Bigstore throughput" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="big_fetch_ram" type="BigRedis RAM Hits" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="big_fetch_flash" type="BigRedis Flash Hits" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="big_write_ram" type="BigRedis RAM Writes" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="big_write_flash" type="BigRedis Flash Writes" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="big_del_ram" type="BigRedis Deletes - RAM" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="big_del_flash" type="BigRedis Deletes - Flash" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="big_io_ratio_redis" type="BigRedis IO ops" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="big_io_ratio_flash" type="BigRedis Flash IO ops" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="bigstore_io_reads" type="BigRedis Flash IO Reads" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="bigstore_io_writes" type="BigRedis Flash IO Writes" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="bigstore_io_dels" type="BigRedis Flash IO Deletes" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="bigstore_io_read_bytes" type="BigRedis Flash IO Read Throughput" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="bigstore_io_write_bytes" type="BigRedis Flash IO Write Throughput" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="ram_overhead" type="BigRedis RAM Overhead" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="bigstore_objs_ram" type="BigRedis RAM Value Count" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="bigstore_objs_flash" type="BigRedis Flash Value Count" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="used_memory" type="BigRedis Used Memory" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="mem_size_lua" type="Redis Lua Scripting Heap Size" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="used_ram" type="BigRedis RAM Used" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="used_bigstore" type="BigRedis Flash Used" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="conns" type="Client Connection Count" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="total_connections_received" type="New Connections Per Sec" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="ingress_bytes" type="Ingress Bytes" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="egress_bytes" type="Egress Bytes" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="read_req" type="DB Request Rate - Read" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="read_res" type="DB Response Rate - Read" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="write_req" type="DB Request Rate - Write" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="write_res" type="DB Response Rate - Write" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="other_req" type="DB Request Rate - Non Read/Write" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="other_res" type="DB Response Rate - Non Read/Write " aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="total_req" type="Total Request Rate" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="total_res" type="Total Response Rate" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="monitor_sessions_count" type="Number of Monitor Sessions" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="avg_read_latency" type="Average Read latency" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="avg_write_latency" type="Average Write Latency" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="avg_other_latency" type="Average Latency - Other" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="avg_latency" type="Average Latency" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="shard_cpu_user" type="BigRedis Flash Used " aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="shard_cpu_system" type="BigRedis Flash Used " aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="main_thread_cpu_user" type="BigRedis Flash Used " aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="main_thread_cpu_system" type="BigRedis Flash Used " aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="main_thread_cpu_user" type="BigRedis Flash Used " aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="fork_cpu_user" type="BigRedis Flash Used " aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="fork_cpu_system" type="BigRedis Flash Used " aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
 
     </stat>
 
