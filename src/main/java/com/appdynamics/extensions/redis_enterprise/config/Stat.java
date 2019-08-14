@@ -30,6 +30,17 @@ public class Stat {
     @XmlAttribute(name = Constants.URL)
     private String url;
 
+    @XmlElement(name = "stat")
+    public Stat[] stats;
+
+    public Stat[] getStats () {
+        return stats;
+    }
+
+    public void setStats (Stat[] stats) {
+        this.stats = stats;
+    }
+
     public Metric[] getMetric () {
         return metric;
     }

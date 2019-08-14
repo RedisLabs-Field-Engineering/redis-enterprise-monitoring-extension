@@ -4,14 +4,13 @@ import com.appdynamics.extensions.conf.MonitorContextConfiguration;
 import com.appdynamics.extensions.http.HttpClientUtils;
 import com.appdynamics.extensions.logging.ExtensionsLoggerFactory;
 import com.appdynamics.extensions.metrics.Metric;
+import com.appdynamics.extensions.redis_enterprise.config.Stat;
+import com.appdynamics.extensions.util.JsonUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Phaser;
 
 /**
@@ -26,42 +25,42 @@ public class ObjectMetricsCollectorSubTask implements Runnable {
     private final String statsEndpointUrl;
     private final MetricWriteHelper metricWriteHelper;
     private final String serverName;
-
-    private com.appdynamics.extensions.redis_enterprise.config.Metric[] metricsFromConfig;
+    JsonNode jsonNode;
+    private Stat parentStat;
     private Phaser phaser;
 
-    public ObjectMetricsCollectorSubTask (String displayName, String statsEndpointUrl, String uid, String objectName,
-                                          MonitorContextConfiguration monitorContextConfiguration, MetricWriteHelper metricWriteHelper, com.appdynamics.extensions.redis_enterprise.config.Metric[] metricsFromConfig, Phaser phaser) {
+    public ObjectMetricsCollectorSubTask (String displayName,
+                                          String statsEndpointUrl,
+                                          String uid,
+                                          String objectName,
+                                          MonitorContextConfiguration monitorContextConfiguration,
+                                          MetricWriteHelper metricWriteHelper,
+                                          Stat parentStat,
+                                          Phaser phaser) {
         this.uid = uid;
         this.objectName = objectName;
         this.statsEndpointUrl = statsEndpointUrl;
         this.monitorContextConfiguration = monitorContextConfiguration;
         this.metricWriteHelper = metricWriteHelper;
         this.serverName = displayName;
-        this.metricsFromConfig = metricsFromConfig;
+        this.parentStat = parentStat;
         this.phaser = phaser;
         this.phaser.register();
     }
 
     @Override
-
     public void run () {
-        CloseableHttpClient httpClient = monitorContextConfiguration.getContext().getHttpClient();
-        Map<String, String> metricsApiResponse = null;
-
-        if(!uid.isEmpty()) {
-            LOGGER.debug("Extracting metricsFromConfig for [{}] ", statsEndpointUrl + uid);
-            JsonNode objectNode;
-            Map<String, Map<String, String>> map;
-            ObjectMapper mapper = new ObjectMapper();
-            objectNode = HttpClientUtils.getResponseAsJson(httpClient, statsEndpointUrl + uid, JsonNode.class);
-            map = (Map<String, Map<String, String>>)mapper.convertValue(objectNode, HashMap.class);
-            metricsApiResponse = map.get(uid);
-        }
-        ParseApiResponse parser = new ParseApiResponse(metricsApiResponse, serverName);
-        List<Metric> metricsList = parser.extractMetricsFromApiResponse(metricsFromConfig);
-        metricWriteHelper.transformAndPrintMetrics(metricsList);
+        collectMetrics(parentStat);
         phaser.arriveAndDeregister();
     }
 
+    private void collectMetrics (Stat stat) {
+        CloseableHttpClient httpClient = monitorContextConfiguration.getContext().getHttpClient();
+        LOGGER.debug("Extracting metricsFromConfig for [{}] ", statsEndpointUrl + uid);
+        jsonNode = HttpClientUtils.getResponseAsJson(httpClient, statsEndpointUrl + uid, JsonNode.class);
+        ParseApiResponse parser = new ParseApiResponse(jsonNode, monitorContextConfiguration.getMetricPrefix() + "|" + serverName + "|" + objectName);
+        List<Metric> metricsList = parser.extractMetricsFromApiResponse(stat, JsonUtils.getNestedObject(jsonNode, uid));
+        metricWriteHelper.transformAndPrintMetrics(metricsList);
+    }
 }
+

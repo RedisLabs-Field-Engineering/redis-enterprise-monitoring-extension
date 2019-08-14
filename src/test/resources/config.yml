@@ -14,27 +14,6 @@ servers:
       useSSL: 'true'
       displayName: 'myCluster'
 
-#    - uri: 'https://localhost:9443'
-#      username: 'vishaka.sekar@appdynamics.com'
-#      password: 'AppD@123'
-#      encryptedPassword: ''
-#      useSSL: 'true'
-#      displayName: 'myCluster3'
-#
-#
-#
-#    - uri: 'https://localhost:9449'
-#      username: 'fake@appdynamics.com'
-#      password: 'fake@123'
-#      encryptedPassword: ''
-#      useSSL: 'true'
-#      displayName: 'FakeClsuter'
-
-objects:
-  database: ['test','trdt']
-  node: ['172.17.0.2']
-  shard: ['3']
-
 connection:
   socketTimeout: 5000 # Read Timeout
   connectTimeout: 5000 # Connection Timeout
@@ -44,9 +23,14 @@ connection:
   sslVerifyHostname: true
   sslProtocols: [] # If null, by default TLSv1, TLSv1.1, TLSv1.2 are supported.
 
-  sslTrustStorePath: "/Users/vishaka.sekar/AppDynamics/ssl-trial/client_truststore.jks" # If not set, will set value from "-Dappdynamics.agent.monitors.truststore.path=/path/cacerts" if present, else will set value as <MachineAgentHome>/conf/extensions-cacerts.jks.
+  sslTrustStorePath: "/Users/vishaka.sekar/AppDynamics/ssl/client_truststore.jks" # If not set, will set value from "-Dappdynamics.agent.monitors.truststore.path=/path/cacerts" if present, else will set value as <MachineAgentHome>/conf/extensions-cacerts.jks.
   sslTrustStorePassword: "test1234" # If not set, will set value from "-Dappdynamics.agent.monitors.truststore.password".
   sslTrustStoreEncryptedPassword: "" ## If not set, will set value from "-Dappdynamics.agent.monitors.truststore.encryptedPassword".
+
+objects:
+  database: ['test']
+  node: ['']
+  shard: ['']
 
 proxy:
   uri: ""
@@ -59,11 +43,11 @@ encryptionKey: "myKey"
 # numberOfThreads = for each server
 numberOfThreads: 20
 
-#metricPathReplacements:
-#   - replace: "_"
-#    replaceWith: "%"
-#  - replace: "percent"
-#    replaceWith: "%"
+metricPathReplacements:
+  - replace: "_"
+    replaceWith: "%"
+  - replace: "percent"
+    replaceWith: "%"
 
 customDashboard:
   enabled: false
@@ -77,7 +61,7 @@ customDashboard:
 # If any of the following fields are not set, the values of the specific fields are set from the system properties of the corresponding fields as specified in the comments.
 # If the system properties are not set for the field, then the data is retrieved from machine agent configFile. Please refer to ControllerInfoFactory for more details.
 controllerInfo:
-  controllerHost: "" # -Dappdynamics.controller.hostName
+  controllerHost: "localhost" # -Dappdynamics.controller.hostName
   controllerPort: 8090 # -Dappdynamics.controller.port
   controllerSslEnabled: false # -Dappdynamics.controller.ssl.enabled
   enableOrchestration: false # N/A

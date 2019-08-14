@@ -9,15 +9,12 @@ import com.appdynamics.extensions.redis_enterprise.config.Stats;
 import com.appdynamics.extensions.redis_enterprise.metrics.ClusterMetricsCollectorTask;
 import com.appdynamics.extensions.redis_enterprise.metrics.ObjectMetricsCollectorTask;
 import com.appdynamics.extensions.redis_enterprise.utils.Constants;
-import org.apache.http.StatusLine;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Phaser;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author: {Vishaka Sekar} on {7/11/19}
@@ -42,57 +39,47 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
     public void run () {
 
         Map<String, ?> config = configuration.getConfigYml();
-        int heartBeat = getConnectionStatus(server);
-        metricWriteHelper.printMetric(configuration.getMetricPrefix() + "|" + server.get(Constants.DISPLAY_NAME).toString() + "|" + "Connection Status", String.valueOf(heartBeat), "AVERAGE", "AVERAGE", "INDIVIDUAL");
-        if (heartBeat == 1) {
+        AtomicInteger heartBeat = getConnectionStatus(server);
+        metricWriteHelper.printMetric(configuration.getMetricPrefix() + "|" + server.get(Constants.DISPLAY_NAME).toString() + "|" + "Connection Status", String.valueOf(heartBeat.get()), "AVERAGE", "AVERAGE", "INDIVIDUAL");
+        if (heartBeat.get() == 1) {
             Map<String, ?> objects = (Map<String, ?>) config.get("objects");
             String uri = server.get(Constants.URI).toString();
             String displayName = server.get(Constants.DISPLAY_NAME).toString();
-
 
             if (objects.size() > 0) {
                 for (Map.Entry object : objects.entrySet()) {
                     LOGGER.info("Starting metric collection for object [{}] on server [{}]", object.getKey(), displayName);
                     if (!((List<String>) object.getValue()).isEmpty()) {
-                        collectStatMetrics(displayName, uri, object.getKey().toString(), (List<String>) object.getValue());
+                        collectObjectMetrics(displayName, uri, object.getKey().toString(), (List<String>) object.getValue());
                     } else {
                         LOGGER.info("No object names of type [{}] found in config.yml", object.getKey());
                     }
                 }
             }
+            else{
+                LOGGER.info("No object names found in config.yml, not collecting Db Metrics, Shard Metrics or Node Metrics");
+            }
             collectClusterMetrics(displayName, uri);
-
         }
+        LOGGER.info("Cannot connect to cluster {} ", server.get(Constants.DISPLAY_NAME).toString());
         phaser.arriveAndAwaitAdvance();
     }
 
-    private int getConnectionStatus (Map<String, ?> server) {
-        HttpGet get = new HttpGet(server.get(Constants.URI).toString() + "/v1/");
-        CloseableHttpResponse closeableHttpResponse = null;
-        try {
-            closeableHttpResponse = this.configuration.getContext().getHttpClient().execute(get);
-            StatusLine statusLine = closeableHttpResponse.getStatusLine();
-            if (statusLine.getStatusCode() == 200) {
-                return 1;
-            } else if (statusLine.getStatusCode() != 200) {
-                HttpClientUtils.printError(closeableHttpResponse, server.get(Constants.URI).toString() + "/v1/");
-                return 0;
-            }
-        } catch (IOException e) {
-            LOGGER.info("Cannot connect to Cluster {} {}. Not collecting metrics", server.get(Constants.DISPLAY_NAME), e);
-        } finally {
-            if (closeableHttpResponse != null) {
-                try {
-                    closeableHttpResponse.close();
-                } catch (IOException e) {
-                    LOGGER.info("Error while closing connection {}", e);
-                }
-            }
+    private AtomicInteger getConnectionStatus (Map<String, ?> server) {
+        String url = getConnectionUrl(server);
+        AtomicInteger heartbeat = new AtomicInteger(0);
+        String response = HttpClientUtils.getResponseAsStr(this.configuration.getContext().getHttpClient(), url);
+        if(response != null){
+          heartbeat.set(1);
         }
-        return 0;
+        return heartbeat;
     }
 
-    private void collectStatMetrics (String displayName, String uri, String objectType, List<String> names) {
+    private String getConnectionUrl (Map<String, ?> server) {
+        return server.get(Constants.URI).toString() + "/v1/"; //better idea to place this is in config.tml so that users can configure various versions of the api ex: v1,v2 etc
+    }
+
+    private void collectObjectMetrics (String displayName, String uri, String objectType, List<String> names) {
         Stats stats = (Stats) configuration.getMetricsXml();
         Stat[] stat = stats.getStat();
         for (Stat statistic : stat) {
@@ -100,7 +87,6 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
                 ObjectMetricsCollectorTask objectMetricsCollectorTask = new ObjectMetricsCollectorTask(displayName, uri, names, statistic, configuration, metricWriteHelper, phaser);
                 configuration.getContext().getExecutorService().execute(statistic.getType() + " task - " , objectMetricsCollectorTask);
             }
-
         }
     }
 

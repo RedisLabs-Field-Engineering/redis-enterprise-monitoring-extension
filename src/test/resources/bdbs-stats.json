@@ -1,7 +1,12 @@
-[
-  {
+ {
   "3": {
-    "conns": 0,
+    "conns": 10,
+    "conns1": {
+      "metric1": 40,
+      "conns2": {
+        "metric2": 50
+      }
+    },
     "egress_bytes": 0,
     "etime": "2019-07-23T19:51:23Z",
     "evicted_objects": 0,
@@ -39,4 +44,3 @@
     "write_res": 0
   }
 }
-]
