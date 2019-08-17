@@ -95,53 +95,53 @@
 
     <!-- Shard Metrics -->
     <stat type="shard" url = "/v1/shards" statsUrl = "/v1/shards/stats/last/" id = "uid" name= "uid" >
-        <metric attr="aof_rewrite_inprog" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="avg_ttl" type="Cluster COnn" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="bigstore_iops" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="bigstore_throughput" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="bigstore_kv_ops" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="bigstore_objs_flash" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="bigstore_objs_ram" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="big_fetch_ram" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="big_fetch_flash" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="big_write_ram" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="big_write_flash" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="big_del_ram" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/><metric attr="available_flash" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="big_del_flash" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="big_io_ratio_redis" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="big_io_ratio_flash" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="bigstore_io_reads" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="bigstore_io_writes" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="bigstore_io_dels" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="bigstore_io_read_bytes" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="bigstore_io_write_bytes" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="blocked_clients" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="connected_clients" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="evicted_objects" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="expired_objects" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="last_save_time" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="used_memory" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="mem_size_lua" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="used_memory_peak" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="used_memory_rss" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="no_of_keys" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="pubsub_channels" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="pubsub_patterns" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="rdb_changes_since_last_save" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="read_hits" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="read_misses" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="total_req" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="write_hits" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="write_misses" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="mem_frag_ratio" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="disk_frag_ratio" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="no_of_expires" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="shard_cpu_user" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="shard_cpu_system" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="main_thread_cpu_user" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="main_thread_cpu_system" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="fork_cpu_user" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
-        <metric attr="fork_cpu_system" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="aof_rewrite_inprog" type="AOF Rewrites In Progress " aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="avg_ttl" type="Avg TTL" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="bigstore_iops" type="BigStore IO" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="bigstore_throughput" type="BigStore Throughput" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="bigstore_kv_ops" type="BigStore Key Access Per Sec " aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="bigstore_objs_flash" type="BigStore Key Count - Flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="bigstore_objs_ram" type="BigStore Key Count - RAM" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="big_fetch_ram" type="BigRedis Fetch - RAM" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="big_fetch_flash" type="BigRedis Fetch - Flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="big_write_ram" type="BigRedis Writes - RAM" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="big_write_flash" type="BigRedis Writes - Flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="big_del_ram" type="BigRedis Deletes - RAM" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/><metric attr="available_flash" type="available_flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="big_del_flash" type="BigRedis Deletes - Flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="big_io_ratio_redis" type="BigRedis IO Ratio - RAM" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="big_io_ratio_flash" type="BigRedis IO Ratio - Flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="bigstore_io_reads" type="BigStore IO Reads" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="bigstore_io_writes" type="BigStore IO Writes" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="bigstore_io_dels" type="BigStore IO Deletes" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="bigstore_io_read_bytes" type="BigStore Read Throughput" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="bigstore_io_write_bytes" type="BIgStore Write Throughput" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="blocked_clients" type="Clients Blocked" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="connected_clients" type="Clients Connected" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="evicted_objects" type="Evicted Objects" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="expired_objects" type="Expired Objects" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="last_save_time" type="Last RDB Save Time" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="used_memory" type="Memory Used" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="mem_size_lua" type="Redis Lua Heap Size" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="used_memory_peak" type="Peak Memory Used" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="used_memory_rss" type="RSS" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="no_of_keys" type="Number of Keys" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="pubsub_channels" type="PubSub Channels" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="pubsub_patterns" type="PubSub Patterns" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="rdb_changes_since_last_save" type="RDB Changes" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="read_hits" type="Read Hits" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="read_misses" type="Read Misses" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="total_req" type="Total Requests" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="write_hits" type="Write Hits" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="write_misses" type="Write Misses" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="mem_frag_ratio" type="Memory Frag Ratio" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="disk_frag_ratio" type="Disk Frag Ratio" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="no_of_expires" type="Number of Expires" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="shard_cpu_user" type="Percent cores - User mode" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="shard_cpu_system" type="Percent cores - System mode" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="main_thread_cpu_user" type="Main Thread - User mode" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="main_thread_cpu_system" type="Main Thread - System mode" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="fork_cpu_user" type="Fork Process - User mode" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
+        <metric attr="fork_cpu_system" type="Fork Process - System mode" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
     </stat>
 
     <!-- Cluster Metrics -->
@@ -165,7 +165,7 @@
         <metric attr="conns" type="Number of Client Connections" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>
         <metric attr="ingress_bytes" type="Ingress Rate" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>
         <metric attr="egress_bytes" type="Egress Rate" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>
-        <metric attr="bigstore_kv_ops" type="BigRedis Read/Write ops" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="bigstore_kv_ops" type="BigRedis Key Access Per Sec" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>
         <metric attr="bigstore_iops" type="BigRedis IO ops" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>
         <metric attr="bigstore_throughput" type="BigRedis Throughput" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>
         <metric attr="bigstore_free" type="BigRedis Memory - Free" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>
