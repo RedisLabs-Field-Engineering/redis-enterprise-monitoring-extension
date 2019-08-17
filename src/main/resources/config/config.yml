@@ -59,11 +59,11 @@ encryptionKey: "myKey"
 # numberOfThreads = for each server
 numberOfThreads: 20
 
-#metricPathReplacements:
-#   - replace: "_"
-#    replaceWith: "%"
-#  - replace: "percent"
-#    replaceWith: "%"
+metricPathReplacements:
+   - replace: "_"
+    replaceWith: "%"
+  - replace: "percent"
+    replaceWith: "%"
 
 customDashboard:
   enabled: false
