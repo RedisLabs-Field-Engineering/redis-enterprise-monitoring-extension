@@ -8,7 +8,6 @@ import com.appdynamics.extensions.http.HttpClientUtils;
 import com.appdynamics.extensions.metrics.MetricCharSequenceReplacer;
 import com.appdynamics.extensions.redis_enterprise.config.Metric;
 import com.appdynamics.extensions.redis_enterprise.config.Stat;
-import com.appdynamics.extensions.redis_enterprise.config.Stats;
 import com.appdynamics.extensions.util.MetricPathUtils;
 import com.appdynamics.extensions.yml.YmlReader;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -34,7 +33,7 @@ import java.util.concurrent.Phaser;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 /**
@@ -56,7 +55,6 @@ public class ObjectMetricsCollectorTaskTest {
 
         configuration = mock(MonitorContextConfiguration.class);
         configuration.setConfigYml("src/test/resources/config.yml");
-        configuration.setMetricXml("src/test/resources/metrics.xml", Stats.class);
         metricWriteHelper = mock(MetricWriteHelper.class);
         Map<String, ?> conf = YmlReader.readFromFileAsMap(new File("src/test/resources/config.yml"));
         ABaseMonitor baseMonitor = mock(ABaseMonitor.class);

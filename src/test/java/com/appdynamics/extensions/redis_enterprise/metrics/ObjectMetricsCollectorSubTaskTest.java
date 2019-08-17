@@ -56,7 +56,6 @@ public class ObjectMetricsCollectorSubTaskTest {
 
         configuration = mock(MonitorContextConfiguration.class);
         configuration.setConfigYml("src/test/resources/config.yml");
-        configuration.setMetricXml("src/test/resources/metrics.xml", Stats.class);
         metricWriteHelper = mock(MetricWriteHelper.class);
         Map<String, ?> conf = YmlReader.readFromFileAsMap(new File("src/test/resources/config.yml"));
         ABaseMonitor baseMonitor = mock(ABaseMonitor.class);
