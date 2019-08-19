@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author: {Vishaka Sekar} on {7/26/19}
+ * @author: Vishaka Sekar on 7/26/19
  */
 class ParseApiResponse {
 

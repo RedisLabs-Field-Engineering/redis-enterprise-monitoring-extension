@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.Phaser;
 
 /**
- * @author: {Vishaka Sekar} on {7/14/19}
+ * @author: Vishaka Sekar} on 7/14/19
  */
 public class ObjectMetricsCollectorSubTask implements Runnable {
 
@@ -58,7 +58,7 @@ public class ObjectMetricsCollectorSubTask implements Runnable {
         CloseableHttpClient httpClient = monitorContextConfiguration.getContext().getHttpClient();
         LOGGER.debug("Extracting metricsFromConfig for [{}] ", statsEndpointUrl + uid);
         jsonNode = HttpClientUtils.getResponseAsJson(httpClient, statsEndpointUrl + uid, JsonNode.class);
-        ParseApiResponse parser = new ParseApiResponse(jsonNode, monitorContextConfiguration.getMetricPrefix() + "|" + serverName + "|" + objectName);
+        ParseApiResponse parser = new ParseApiResponse(jsonNode, monitorContextConfiguration.getMetricPrefix() + "|" + serverName + "|" + stat.getType() + "|" + objectName);
         List<Metric> metricsList = parser.extractMetricsFromApiResponse(stat, JsonUtils.getNestedObject(jsonNode, uid));
         metricWriteHelper.transformAndPrintMetrics(metricsList);
     }

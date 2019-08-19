@@ -16,53 +16,35 @@ The extension needs to be able to connect to Redis Enterprise in order to collec
 1. Download and unzip the RedisEnterpriseMonitor-1.0.0-Beta.zip to the "<MachineAgent_Dir>/monitors" directory
 2. Edit the file config.yml as described below in Configuration Section, located in    <MachineAgent_Dir>/monitors/RedisEnterpriseMonitor and update the Redis Enterprise server(s) details.
 3. All metrics to be reported are configured in metrics.xml. Users can remove entries from metrics.xml to stop the metric from reporting.
-4. Restart the Machine Agent
+4. Edit the file config.yml located at <MachineAgent_Dir>/monitors/RedisEnterpriseMonitor. The metricPrefix of the extension has to be configured as specified [here](https://community.appdynamics.com/t5/Knowledge-Base/How-do-I-troubleshoot-missing-custom-metrics-or-extensions/ta-p/28695#Configuring%20an%20Extension). Please make sure that the right metricPrefix is chosen based on your machine agent deployment, otherwise this could lead to metrics not being visible in the controller.
+5. Restart the Machine Agent
 
-Please place the extension in the **"monitors"** directory of your **Machine Agent** installation directory. Do not place the extension in the **"extensions"** directory of your **Machine Agent** installation directory.
+Please make sure to place the extension in the **"monitors"** directory of your **Machine Agent** installation directory. Do not place the extension in the **"extensions"** directory of your **Machine Agent** installation directory.
 
-In the AppDynamics Metric Browser, look for: Application Infrastructure Performance  | \<Tier\> | Custom Metrics | Redis Enterprise for default metric-path.
 
 ## Configuration
 This section will help set up you config.yml
 Note : Please make sure to not use tab (\t) while editing yaml files. You may want to validate the yaml file using a [yaml validator](http://yamllint.com/)
 
- 1. Configure the `metricPrefix` according to you
+ 1. Configure the `metricPrefix` according to your configuration.
  2. Configure the Redis Enterprise instances by specifying the name(required), host(required), port(required) and collectionName(required) of the Redis Enterprise instance, and rest of the fields (only if authentication enabled),
     encryptedPassword(only if password encryption required). If that is so, please update that name for the "applicationName" field. You can configure multiple instances as follows to report metrics
-    For example,
 
-    ```
-    servers:
-       # mandatory parameters
-      - host: "localhost"
-        port: 8983
-        name: "Server 1"
-        collectionName : ["gettingStarted","techproducts"]
-        applicationName: "RedisEnterprise"
-
-
-      - host: "localhost"
-        port: 7574
-        name: "Server 2"
-        collectionName : ["gettingStarted","techproducts"]
-        applicationName: "RedisEnterprise"
-
-    ```
-    3. Configure the encyptionKey for encryptionPasswords(only if password encryption required).
+ 3. Configure the encyptionKey for encryptionPasswords(only if password encryption required).
        For example,
     ```
        #Encryption key for Encrypted password.
        encryptionKey: "axcdde43535hdhdgfiniyy576"
     ```
-    4. Configure the numberOfThreads
+ 4. Configure the numberOfThreads
        For example,
-       If number of servers that need to be monitored is 3, then number of threads required is 5 * 3 = 15
+       If number of servers that need to be monitored = 3 and the total number of all objects = 4, then number of threads required is 3 * 4 = 12
     ```
-       numberOfThreads: 15
+       numberOfThreads: 12
     ```
 
 ## Metrics
-
+THe metrics.xml file has all the metrics that are present https://storage.googleapis.com/rlecrestapi/rest-html/http_rest_api.html#object-metrics
 
 ### Credentials Encryption
 
@@ -90,15 +72,9 @@ Please provide the following in order for us to assist you better.
 
 For any support related questions, you can also contact help@appdynamics.com.
 
-
-
-### Contributing
-
-Always feel free to fork and contribute any changes directly here on [GitHub](https://github.com/Appdynamics/RedisEnterprise-monitoring-extension/).
-
 ### Version
 |          Name            |  Version   |
 |--------------------------|------------|
 |Extension Version         |1.0.0 Beta       |
-|Product Tested On         ||
-|Last Update               |08/16/2019|
+|Product Tested On         |Redis Enterprise v5.4|
+|Last Update               |08/19/2019|

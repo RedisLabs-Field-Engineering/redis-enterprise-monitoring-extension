@@ -23,7 +23,7 @@
                 <task-arguments>
                     <!-- config and metricsFromConfig file-->
                         <argument name="config-file" is-required="true" default-value="monitors/RedisEnterpriseMonitor/config.yml" />
-                        <argument name="metricsFromConfig-file" is-required="true" default-value="monitors/RedisEnterpriseMonitor/metricsFromConfig.xml" />
+                        <argument name="metrics-file" is-required="true" default-value="monitors/RedisEnterpriseMonitor/metrics.xml" />
                 </task-arguments>
                 <java-task>
                         <classpath>redis-enterprise-monitoring-extension.jar</classpath>

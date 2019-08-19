@@ -7,7 +7,7 @@
         <metric attr="evicted_objects" alias="Evicted Objects" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
         <metric attr="expired_objects" alias="Expired Objects" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
         <metric attr="instantaneous_ops_per_sec" alias="Instantaneous Ops/sec" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
-        <metric attr="read_hits" alias="Red Hits" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="read_hits" alias="Read Hits" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
         <metric attr="read_misses" alias="Read Misses" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
         <metric attr="write_hits" alias="Write Hits" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
         <metric attr="write_misses" alias="Write Misses" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
@@ -73,9 +73,9 @@
     <metric attr="available_flash" alias="Available Flash" multiplier="9.54e-7" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
     <metric attr="provisional_flash" alias="Provisional Flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>
     <!--use multiplier -->
-    <metric attr="cpu_user" alias="Cpu Time - User" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
-    <metric attr="cpu_system" alias="Cpu Time - System" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>
-    <metric attr="cpu_idle" alias="Cpu Idle Time" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+    <metric attr="cpu_user" alias="Cpu Time - User" multiplier= "100" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+    <metric attr="cpu_system" alias="Cpu Time - System" multiplier= "100" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>
+    <metric attr="cpu_idle" alias="Cpu Idle Time" multiplier= "100" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
     <!--use multiplier -->
     <metric attr="ephemeral_storage_avail" alias="Available Ephemeral Disk Space" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>
     <metric attr="persistent_storage_avail" alias="Available Persistent Storage" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>
@@ -152,9 +152,9 @@
         <metric attr="available_flash" alias="Available Flash" multiplier="9.54e-7" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
         <metric attr="provisional_flash" alias="Provisional Flash" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>
         <!--use multiplier -->
-        <metric attr="cpu_user" alias="Cpu Time - User" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
-        <metric attr="cpu_system" alias="Cpu Time - System" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>
-        <metric attr="cpu_idle" alias="Cpu Idle Time" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="cpu_user" alias="Cpu Time - User" multiplier= "100" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="cpu_system" alias="Cpu Time - System" multiplier= "100" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>
+        <metric attr="cpu_idle" alias="Cpu Idle Time" multiplier= "100" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
         <!--use multiplier -->
         <metric attr="ephemeral_storage_avail" alias="Available Ephemeral Disk Space" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>
         <metric attr="persistent_storage_avail" alias="Available Persistent Storage" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "COLLECTIVE"/>

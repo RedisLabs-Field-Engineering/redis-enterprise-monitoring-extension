@@ -1,34 +1,26 @@
 #This will create this metric in all the tiers, under this path
 metricPrefix: Custom Metrics|Redis Enterprise|
 
-#This will create it in specific Tier/Component. Make sure to replace <COMPONENT_ID> with the appropriate one from your environment.
-#To find the <COMPONENT_ID> in your environment, please follow the screenshot https://docs.appdynamics.com/display/PRO42/Build+a+Monitoring+Extension+Using+Java
+#This will create it in specific Tier/Component.
+#Make sure to replace <COMPONENT_ID> with the appropriate one from your environment.
+#To find the <COMPONENT_ID> in your environment, please follow the screen shot https://docs.appdynamics.com/display/PRO42/Build+a+Monitoring+Extension+Using+Java
 #metricPrefix: Server|Component:10|Custom Metrics|Redis Enterprise|
 
 
 servers:
     - uri: 'https://localhost:9443'
-      username: 'vishaka.sekar@appdynamics.com'
+      username: 'vishaka.sekar@appdynamics.com' # user should have privilege in Redis Enterprise to view stats and view info
       password: 'AppD@123'
       encryptedPassword: ''
       useSSL: 'true'
       displayName: 'myCluster'
-
-#    - uri: 'https://localhost:9443'
-#      username: 'vishaka.sekar@appdynamics.com'
-#      password: 'AppD@123'
-#      encryptedPassword: ''
-#      useSSL: 'true'
-#      displayName: 'myCluster3'
-#
-#
-#
+# more servers go here
 #    - uri: 'https://localhost:9449'
-#      username: 'fake@appdynamics.com'
-#      password: 'fake@123'
+#      username: 'test@appdynamics.com'
+#      password: 'test@123'
 #      encryptedPassword: ''
 #      useSSL: 'true'
-#      displayName: 'FakeClsuter'
+#      displayName: 'testClsuter'
 
 objects:
   database: ['test','trdt']
@@ -44,8 +36,9 @@ connection:
   sslVerifyHostname: true
   sslProtocols: [] # If null, by default TLSv1, TLSv1.1, TLSv1.2 are supported.
 
-  sslTrustStorePath: "/Users/vishaka.sekar/AppDynamics/ssl-trial/client_truststore.jks" # If not set, will set value from "-Dappdynamics.agent.monitors.truststore.path=/path/cacerts" if present, else will set value as <MachineAgentHome>/conf/extensions-cacerts.jks.
-  sslTrustStorePassword: "test1234" # If not set, will set value from "-Dappdynamics.agent.monitors.truststore.password".
+#Converting PEM to JKS https://docs.oracle.com/cd/E35976_01/server.740/es_admin/src/tadm_ssl_convert_pem_to_jks.html
+  sslTrustStorePath: "/path/to/truststore.jks" # If not set, will set value from "-Dappdynamics.agent.monitors.truststore.path=/path/cacerts" if present, else will set value as <MachineAgentHome>/conf/extensions-cacerts.jks.
+  sslTrustStorePassword: "changeit" # If not set, will set value from "-Dappdynamics.agent.monitors.truststore.password".
   sslTrustStoreEncryptedPassword: "" ## If not set, will set value from "-Dappdynamics.agent.monitors.truststore.encryptedPassword".
 
 proxy:
@@ -56,21 +49,21 @@ proxy:
 
 encryptionKey: "myKey"
 
-# numberOfThreads = for each server
+# numberOfThreads = 1 for each server + 1 for each object
 numberOfThreads: 20
 
 metricPathReplacements:
-   - replace: "_"
+  - replace: "_"
     replaceWith: "%"
   - replace: "percent"
     replaceWith: "%"
 
 customDashboard:
-  enabled: false
+  enabled: true
   dashboardName: "Redis EnterPrise Monitor Dashboard"
   sslCertCheckEnabled: true
   # Update the path to the dashboard file.
-  pathToSIMDashboard:
+  pathToSIMDashboard: "monitors/CustomDashboard_Redis+Enterprise_Dashboard.json"
   pathToNormalDashboard:
   periodicDashboardCheckInSeconds: 300
 
