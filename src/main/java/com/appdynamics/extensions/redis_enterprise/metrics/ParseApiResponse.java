@@ -44,7 +44,7 @@ class ParseApiResponse {
                      props.put("aggregationType", metricFromConfig.getAggregationType());
                      props.put("clusterRollUpType", metricFromConfig.getClusterRollUpType());
                      props.put("timeRollUpType", metricFromConfig.getTimeRollUpType());
-                     props.put("alias", metricFromConfig.getAlias()); //todo: convert
+                     props.put("alias", metricFromConfig.getAlias()); //todo: convert, multiplier
                      Metric metric = new Metric(metricFromConfig.getAttr(), value, props, metricPrefix, metricPathTokens);
                      metricList.add(metric);
                  } else {

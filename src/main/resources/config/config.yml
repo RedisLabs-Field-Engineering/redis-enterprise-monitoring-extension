@@ -8,11 +8,11 @@ metricPrefix: Custom Metrics|Redis Enterprise|
 
 
 servers:
-    - uri: 'https://localhost:9443'
-      username: 'vishaka.sekar@appdynamics.com' # user should have privilege in Redis Enterprise to view stats and view info
-      password: 'AppD@123'
+    - uri: 'http://35.211.146.18:8080'
+      username: 'b@rl.com' # user should have privilege in Redis Enterprise to view stats and view info
+      password: 'brad'
       encryptedPassword: ''
-      useSSL: 'true'
+      useSSL: 'false'
       displayName: 'myCluster'
 # more servers go here
 #    - uri: 'https://localhost:9449'
@@ -30,24 +30,24 @@ objects:
 connection:
   socketTimeout: 5000 # Read Timeout
   connectTimeout: 5000 # Connection Timeout
-
+#
   sslCertCheckEnabled: true #
   sslCipherSuites: [] # Defaults to "default".
   sslVerifyHostname: true
   sslProtocols: [] # If null, by default TLSv1, TLSv1.1, TLSv1.2 are supported.
 
 #Converting PEM to JKS https://docs.oracle.com/cd/E35976_01/server.740/es_admin/src/tadm_ssl_convert_pem_to_jks.html
-  sslTrustStorePath: "/path/to/truststore.jks" # If not set, will set value from "-Dappdynamics.agent.monitors.truststore.path=/path/cacerts" if present, else will set value as <MachineAgentHome>/conf/extensions-cacerts.jks.
-  sslTrustStorePassword: "changeit" # If not set, will set value from "-Dappdynamics.agent.monitors.truststore.password".
-  sslTrustStoreEncryptedPassword: "" ## If not set, will set value from "-Dappdynamics.agent.monitors.truststore.encryptedPassword".
+#  sslTrustStorePath: "/path/to/truststore.jks" # If not set, will set value from "-Dappdynamics.agent.monitors.truststore.path=/path/cacerts" if present, else will set value as <MachineAgentHome>/conf/extensions-cacerts.jks.
+#  sslTrustStorePassword: "changeit" # If not set, will set value from "-Dappdynamics.agent.monitors.truststore.password".
+#  sslTrustStoreEncryptedPassword: "" ## If not set, will set value from "-Dappdynamics.agent.monitors.truststore.encryptedPassword".
 
-proxy:
-  uri: ""
-  username: ""
-  password: ""
-  encryptedPassword: ""
-
-encryptionKey: "myKey"
+#proxy:
+#  uri: ""
+#  username: ""
+#  password: ""
+#  encryptedPassword: ""
+#
+#encryptionKey: "myKey"
 
 # numberOfThreads = 1 for each server + 1 for each object
 numberOfThreads: 20
@@ -58,32 +58,32 @@ metricPathReplacements:
   - replace: "percent"
     replaceWith: "%"
 
-customDashboard:
-  enabled: true
-  dashboardName: "Redis EnterPrise Monitor Dashboard"
-  sslCertCheckEnabled: true
-  # Update the path to the dashboard file.
-  pathToSIMDashboard: "monitors/CustomDashboard_Redis+Enterprise_Dashboard.json"
-  pathToNormalDashboard:
-  periodicDashboardCheckInSeconds: 300
-
-# If any of the following fields are not set, the values of the specific fields are set from the system properties of the corresponding fields as specified in the comments.
-# If the system properties are not set for the field, then the data is retrieved from machine agent configFile. Please refer to ControllerInfoFactory for more details.
-controllerInfo:
-  controllerHost: "" # -Dappdynamics.controller.hostName
-  controllerPort: 8090 # -Dappdynamics.controller.port
-  controllerSslEnabled: false # -Dappdynamics.controller.ssl.enabled
-  enableOrchestration: false # N/A
-  uniqueHostId: "" # -Dappdynamics.agent.uniqueHostId
-  username: "" # -Dappdynamics.agent.monitors.controller.username
-  password: "" # -Dappdynamics.agent.monitors.controller.password
-  encryptedPassword: "" # -Dappdynamics.agent.monitors.controller.encryptedPassword
-  accountAccessKey: "" # -Dappdynamics.agent.accountAccessKey
-  account: "customer1" # -Dappdynamics.agent.accountName
-  machinePath: "" # -Dappdynamics.machine.agent.hierarchyPath
-  simEnabled: false # -Dappdynamics.sim.enabled
-  applicationName: "" # -Dappdynamics.agent.applicationName
-  tierName: "" # -Dappdynamics.agent.tierName
-  nodeName: "" # -Dappdynamics.agent.nodeName
+#customDashboard:
+#  enabled: true
+#  dashboardName: "Redis EnterPrise Monitor Dashboard"
+#  sslCertCheckEnabled: true
+#  # Update the path to the dashboard file.
+#  pathToSIMDashboard: "monitors/RedisEnterpriseMonitor/CustomDashboard_Redis+Enterprise_Dashboard.json"
+#  pathToNormalDashboard:
+#  periodicDashboardCheckInSeconds: 300
+#
+## If any of the following fields are not set, the values of the specific fields are set from the system properties of the corresponding fields as specified in the comments.
+## If the system properties are not set for the field, then the data is retrieved from machine agent configFile. Please refer to ControllerInfoFactory for more details.
+#controllerInfo:
+#  controllerHost: "" # -Dappdynamics.controller.hostName
+#  controllerPort: 8090 # -Dappdynamics.controller.port
+#  controllerSslEnabled: false # -Dappdynamics.controller.ssl.enabled
+#  enableOrchestration: false # N/A
+#  uniqueHostId: "" # -Dappdynamics.agent.uniqueHostId
+#  username: "" # -Dappdynamics.agent.monitors.controller.username
+#  password: "" # -Dappdynamics.agent.monitors.controller.password
+#  encryptedPassword: "" # -Dappdynamics.agent.monitors.controller.encryptedPassword
+#  accountAccessKey: "" # -Dappdynamics.agent.accountAccessKey
+#  account: "customer1" # -Dappdynamics.agent.accountName
+#  machinePath: "" # -Dappdynamics.machine.agent.hierarchyPath
+#  simEnabled: false # -Dappdynamics.sim.enabled
+#  applicationName: "" # -Dappdynamics.agent.applicationName
+#  tierName: "" # -Dappdynamics.agent.tierName
+#  nodeName: "" # -Dappdynamics.agent.nodeName
 
 enableHealthChecks: true # If not set, will be retrieved from "-Dappdynamics.agent.monitors.healthchecks.enable=true". Defaults to true.

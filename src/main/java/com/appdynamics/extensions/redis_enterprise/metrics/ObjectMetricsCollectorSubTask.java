@@ -25,7 +25,7 @@ public class ObjectMetricsCollectorSubTask implements Runnable {
     private final String statsEndpointUrl;
     private final MetricWriteHelper metricWriteHelper;
     private final String serverName;
-    JsonNode jsonNode;
+    private JsonNode jsonNode;
     private Stat parentStat;
     private Phaser phaser;
 
