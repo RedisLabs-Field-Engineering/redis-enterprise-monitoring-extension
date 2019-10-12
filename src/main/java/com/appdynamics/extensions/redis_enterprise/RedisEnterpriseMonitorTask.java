@@ -76,7 +76,7 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
     }
 
     private String getConnectionUrl (Map<String, ?> server) {
-        return server.get(Constants.URI).toString() + "/v1/"; //better idea to place this is in config.tml so that users can configure various versions of the api ex: v1,v2 etc
+        return server.get(Constants.URI).toString() + "/v1/";
     }
 
     private void collectObjectMetrics (String displayName, String uri, String objectType, List<String> names) {

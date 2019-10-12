@@ -34,7 +34,7 @@ class ParseApiResponse {
                      extractMetricsFromApiResponse(childStat, JsonUtils.getNestedObject(jsonNode, childStat.getName()));
                  }
              }
-             for (com.appdynamics.extensions.redis_enterprise.config.Metric metricFromConfig : stat.getMetric()) {//todo: stat.getMetric() null check
+             for (com.appdynamics.extensions.redis_enterprise.config.Metric metricFromConfig : stat.getMetric()) {
 
                  String value = JsonUtils.getTextValue(jsonNode, metricFromConfig.getAttr());
                  if (value != null) {

@@ -103,7 +103,8 @@ public class ObjectMetricsCollectorTask implements  Runnable {
                                                        String idAttributeFromMetricsXml,
                                                        ArrayNode jsonNodes) {
         for (JsonNode jsonNode : jsonNodes) {
-            if(jsonNode.get(statNameFromMetricsXml).getTextValue().equals(objectName)){
+            if(jsonNode.get(statNameFromMetricsXml).getTextValue().matches(objectName)){
+                LOGGER.debug("Wildcard match for node - {}", jsonNode.get(statNameFromMetricsXml).getTextValue());
                 if(isActive(objectName, jsonNode, statType)){
                     if(jsonNode.get(idAttributeFromMetricsXml) != null) {
                         String idNumber = jsonNode.get(idAttributeFromMetricsXml).isTextual() ?
