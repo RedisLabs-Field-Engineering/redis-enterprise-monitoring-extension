@@ -48,7 +48,7 @@ class ParseApiResponse {
                      Metric metric = new Metric(metricFromConfig.getAttr(), value, props, metricPrefix, metricPathTokens);
                      metricList.add(metric);
                  } else {
-                     LOGGER.info("Metric not found in response");
+                     LOGGER.info("Metric [{}] not found in response", metricFromConfig.getAttr());
                  }
              }
              return metricList;

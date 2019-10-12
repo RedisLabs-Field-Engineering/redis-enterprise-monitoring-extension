@@ -1,10 +1,12 @@
 package com.appdynamics.extensions.redis_enterprise.metrics;
+
 import com.appdynamics.extensions.MetricWriteHelper;
 import com.appdynamics.extensions.conf.MonitorContextConfiguration;
 import com.appdynamics.extensions.http.HttpClientUtils;
 import com.appdynamics.extensions.logging.ExtensionsLoggerFactory;
 import com.appdynamics.extensions.redis_enterprise.config.Stat;
-import javafx.util.Pair;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ArrayNode;
 import org.slf4j.Logger;
@@ -106,7 +108,7 @@ public class ObjectMetricsCollectorTask implements  Runnable {
                     if(jsonNode.get(idAttributeFromMetricsXml) != null) {
                         String idNumber = jsonNode.get(idAttributeFromMetricsXml).isTextual() ?
                                 jsonNode.get(idAttributeFromMetricsXml).getTextValue() : jsonNode.get(idAttributeFromMetricsXml).toString();
-                        return new Pair<>(idNumber, objectName);
+                        return new ImmutablePair<>(idNumber, objectName);
                     }
                     else{
                         LOGGER.debug("The field called [{}] for [{}] is not found", idAttributeFromMetricsXml, objectName);
@@ -117,7 +119,7 @@ public class ObjectMetricsCollectorTask implements  Runnable {
                 }
             }
         }
-        return new Pair<>("-1", objectName);
+        return new ImmutablePair<>("-1", objectName);
     }
 
     private boolean isActive (String objectName, JsonNode jsonNode, String statType){
