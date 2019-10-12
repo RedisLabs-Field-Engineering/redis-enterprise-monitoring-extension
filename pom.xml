@@ -4,7 +4,7 @@
 
     <groupId>com.appdynamics.extensions</groupId>
     <artifactId>redis-enterprise-monitoring-extension</artifactId>
-    <version>1.0.1-Beta</version>
+    <version>1.0.2-Beta</version>
     <packaging>jar</packaging>
     <name>redis-enterprise-monitoring-extension</name>
     <url>http://maven.apache.org</url>

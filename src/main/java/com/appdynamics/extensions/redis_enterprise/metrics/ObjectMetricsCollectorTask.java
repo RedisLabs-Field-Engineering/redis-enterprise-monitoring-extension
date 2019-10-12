@@ -80,31 +80,32 @@ public class ObjectMetricsCollectorTask implements  Runnable {
     }
 
     private List<Pair<String, String>> findIdOfObjectNames (ArrayNode jsonNodes,
-                                                            List<String> objectNames,
+                                                            List<String> objectNamePatterns,
                                                             String id,
                                                             String statNameFromMetricsXml,
                                                             String statType) {
         List<Pair<String, String>> idToObjectNameList = new ArrayList<>();
-        for (String objectName : objectNames) {
-            Pair<String, String> idObjectNamePair = isObjectFoundInRedis(statNameFromMetricsXml, statType, objectName, id, jsonNodes);
+        for (String objectNamePattern : objectNamePatterns) {
+            Pair<String, String> idObjectNamePair = getObjectNameAndId(statNameFromMetricsXml, statType, objectNamePattern, id, jsonNodes);
             if(!idObjectNamePair.getKey().equals( "-1")){
                 idToObjectNameList.add(idObjectNamePair);
             }
             else{
-                LOGGER.info("[{}] not found in Redis Enterprise",objectName);
+                LOGGER.info("[{}] not found in Redis Enterprise",objectNamePattern);
             }
 
         }
         return idToObjectNameList;
     }
 
-    private Pair<String, String> isObjectFoundInRedis (String statNameFromMetricsXml, String statType,
-                                                       String objectName,
-                                                       String idAttributeFromMetricsXml,
-                                                       ArrayNode jsonNodes) {
+    private Pair<String, String> getObjectNameAndId(String statNameFromMetricsXml, String statType,
+                                                    String objectNamePattern,
+                                                    String idAttributeFromMetricsXml,
+                                                    ArrayNode jsonNodes) {
         for (JsonNode jsonNode : jsonNodes) {
-            if(jsonNode.get(statNameFromMetricsXml).getTextValue().matches(objectName)){
-                LOGGER.debug("Wildcard match for node - {}", jsonNode.get(statNameFromMetricsXml).getTextValue());
+            if(jsonNode.get(statNameFromMetricsXml).getTextValue().matches(objectNamePattern)){
+                String objectName = jsonNode.get(statNameFromMetricsXml).getTextValue();
+                LOGGER.debug("Wildcard match for {}", objectName);
                 if(isActive(objectName, jsonNode, statType)){
                     if(jsonNode.get(idAttributeFromMetricsXml) != null) {
                         String idNumber = jsonNode.get(idAttributeFromMetricsXml).isTextual() ?
@@ -120,7 +121,8 @@ public class ObjectMetricsCollectorTask implements  Runnable {
                 }
             }
         }
-        return new ImmutablePair<>("-1", objectName);
+        LOGGER.info("The pattern [{}] did not match any active object in Redis Enterprise", objectNamePattern);
+        return new ImmutablePair<>("-1", "NaN");
     }
 
     private boolean isActive (String objectName, JsonNode jsonNode, String statType){

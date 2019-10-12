@@ -9,7 +9,7 @@ metricPrefix: Custom Metrics|Redis Enterprise|
 
 servers:
     - uri: 'http://localhost:8080'
-      username: 'test@test.com' # user should have privilege in Redis Enterprise to view stats and view info
+      username: 't@t.com' # user should have privilege in Redis Enterprise to view stats and view info
       password: 'test'
       encryptedPassword: ''
       useSSL: 'false'
@@ -23,9 +23,10 @@ servers:
 #      useSSL: 'true'
 #      displayName: 'testClsuter'
 
+# supports wildcards
 objects:
-  database: ['test1','test2', 'db','db1']
-  node: ['172.17.0.2']
+  database: ['test1','test2', 'db*']
+  node: ['172.*']
   shard: ['3']
 
 connection:
