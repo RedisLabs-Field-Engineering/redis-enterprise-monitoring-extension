@@ -5,6 +5,7 @@ import com.appdynamics.extensions.conf.MonitorContextConfiguration;
 import com.appdynamics.extensions.http.HttpClientUtils;
 import com.appdynamics.extensions.logging.ExtensionsLoggerFactory;
 import com.appdynamics.extensions.redis_enterprise.config.Stat;
+import com.appdynamics.extensions.util.JsonUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.codehaus.jackson.JsonNode;
@@ -64,18 +65,21 @@ public class ObjectMetricsCollectorTask implements  Runnable {
     }
 
     private void collectObjectMetrics (String displayName, String uri, List<String> objectNames, Stat statistic, String statsUrl) {
-        ArrayNode jsonNodes;
+        ArrayNode objectDetailsJson;
+        JsonNode objectsStatsJson;
         if(statistic.getUrl() != null && !statistic.getUrl().isEmpty() && statistic.getId()!= null && !statistic.getId().isEmpty()) {
             String url = uri + statistic.getUrl();
-            jsonNodes = HttpClientUtils.getResponseAsJson(this.configuration.getContext().getHttpClient(), url, ArrayNode.class);
-            if(jsonNodes != null){
-                List<Pair<String, String>> IDObjectNamePairs = findIdOfObjectNames(jsonNodes, objectNames, statistic.getId(), statistic.getName(), statistic.getType());
+            objectDetailsJson = HttpClientUtils.getResponseAsJson(this.configuration.getContext().getHttpClient(), url, ArrayNode.class);
+            if(objectDetailsJson != null){
+                objectsStatsJson = HttpClientUtils.getResponseAsJson(this.configuration.getContext().getHttpClient(), statsUrl,  JsonNode.class);
+                List<Pair<String, String>> IDObjectNamePairs = findIdOfObjectNames(objectDetailsJson, objectNames, statistic.getId(), statistic.getName(), statistic.getType());
                     for (Pair<String, String> IDObjectNamePair : IDObjectNamePairs) {
                         String objectId =  IDObjectNamePair.getKey();
                         String objectName =  IDObjectNamePair.getValue();
                         LOGGER.debug("Starting metric collection for object [{}] [{}] with id [{}] in [{}]", statistic.getType(), objectName, objectId, displayName);
+                        JsonNode objectStats = JsonUtils.getNestedObject(objectsStatsJson, objectId);
                         ObjectMetricsCollectorSubTask task = new ObjectMetricsCollectorSubTask(displayName, statsUrl, objectId, objectName,
-                                configuration, metricWriteHelper, statistic, phaser);
+                                configuration, metricWriteHelper, statistic, objectStats, phaser);
                         configuration.getContext().getExecutorService().execute(statistic.getType() + " task - " + IDObjectNamePair.getValue(), task);
                     }
                 }
@@ -90,18 +94,18 @@ public class ObjectMetricsCollectorTask implements  Runnable {
                                                             String id,
                                                             String statNameFromMetricsXml,
                                                             String statType) {
-        List<Pair<String, String>> idToObjectNameList = new ArrayList<>();
+        List<Pair<String, String>> idObjectNamePairs = new ArrayList<>();
         for (String objectNamePattern : objectNamePatterns) {
             Pair<String, String> idObjectNamePair = getObjectNameAndId(statNameFromMetricsXml, statType, objectNamePattern, id, jsonNodes);
             if(!idObjectNamePair.getKey().equals( "-1")){
-                idToObjectNameList.add(idObjectNamePair);
+                idObjectNamePairs.add(idObjectNamePair);
             }
             else{
                 LOGGER.info("[{}] not found in Redis Enterprise",objectNamePattern);
             }
 
         }
-        return idToObjectNameList;
+        return idObjectNamePairs;
     }
 
     private Pair<String, String> getObjectNameAndId(String statNameFromMetricsXml, String statType,

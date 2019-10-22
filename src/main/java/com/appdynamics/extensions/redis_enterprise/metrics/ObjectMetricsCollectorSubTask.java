@@ -25,9 +25,9 @@ public class ObjectMetricsCollectorSubTask implements Runnable {
     private final String statsEndpointUrl;
     private final MetricWriteHelper metricWriteHelper;
     private final String serverName;
-    private JsonNode jsonNode;
     private Stat parentStat;
     private Phaser phaser;
+    private JsonNode jsonNode;
 
     public ObjectMetricsCollectorSubTask (String displayName,
                                           String statsEndpointUrl,
@@ -36,6 +36,7 @@ public class ObjectMetricsCollectorSubTask implements Runnable {
                                           MonitorContextConfiguration monitorContextConfiguration,
                                           MetricWriteHelper metricWriteHelper,
                                           Stat parentStat,
+                                          JsonNode jsonNode,
                                           Phaser phaser) {
         this.uid = uid;
         this.objectName = objectName;
@@ -45,6 +46,7 @@ public class ObjectMetricsCollectorSubTask implements Runnable {
         this.serverName = displayName;
         this.parentStat = parentStat;
         this.phaser = phaser;
+        this.jsonNode = jsonNode;
         this.phaser.register();
     }
 
@@ -60,12 +62,11 @@ public class ObjectMetricsCollectorSubTask implements Runnable {
     }
 
     private void collectMetrics (Stat stat) {
-        CloseableHttpClient httpClient = monitorContextConfiguration.getContext().getHttpClient();
+
         LOGGER.debug("Extracting metricsFromConfig for [{}] ", statsEndpointUrl + uid);
-        jsonNode = HttpClientUtils.getResponseAsJson(httpClient, statsEndpointUrl + uid, JsonNode.class);
         ParseApiResponse parser = new ParseApiResponse(jsonNode, monitorContextConfiguration.getMetricPrefix()
                 + "|" + serverName + "|" + stat.getType() + "|" + objectName);
-        List<Metric> metricsList = parser.extractMetricsFromApiResponse(stat, JsonUtils.getNestedObject(jsonNode, uid));
+        List<Metric> metricsList = parser.extractMetricsFromApiResponse(stat, jsonNode);
         metricWriteHelper.transformAndPrintMetrics(metricsList);
     }
 }
