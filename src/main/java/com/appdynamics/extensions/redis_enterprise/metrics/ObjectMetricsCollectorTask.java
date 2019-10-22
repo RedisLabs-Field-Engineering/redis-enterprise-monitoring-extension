@@ -41,8 +41,13 @@ public class ObjectMetricsCollectorTask implements  Runnable {
 
     @Override
     public void run () {
-        collectMetrics(displayName, uri, objectNames, statistic);
-        phaser.arriveAndDeregister();
+        try {
+            collectMetrics(displayName, uri, objectNames, statistic);
+        }catch(Exception e ){
+            LOGGER.info("Exception while collecting metrics for server {} - {}", displayName , e);
+        } finally {
+            phaser.arriveAndDeregister();
+        }
     }
 
     private void collectMetrics (String displayName, String uri, List<String> objectNames, Stat statistic) {

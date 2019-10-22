@@ -50,8 +50,13 @@ public class ObjectMetricsCollectorSubTask implements Runnable {
 
     @Override
     public void run () {
-        collectMetrics(parentStat);
-        phaser.arriveAndDeregister();
+        try {
+            collectMetrics(parentStat);
+        }catch (Exception e){
+            LOGGER.info("Exception while collecting object metrics {}", objectName);
+        } finally {
+            phaser.arriveAndDeregister();
+        }
     }
 
     private void collectMetrics (Stat stat) {

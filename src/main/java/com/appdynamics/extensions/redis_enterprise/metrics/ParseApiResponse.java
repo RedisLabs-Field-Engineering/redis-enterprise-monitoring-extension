@@ -19,7 +19,7 @@ class ParseApiResponse {
     private static final Logger LOGGER = ExtensionsLoggerFactory.getLogger(ParseApiResponse.class);
     private JsonNode metricsApiResponse;
     private String metricPrefix;
-    List<Metric> metricList = Lists.newArrayList();
+    private List<Metric> metricList = Lists.newArrayList();
 
      ParseApiResponse(JsonNode metricsApiResponse, String metricPrefix ){
         this.metricsApiResponse = metricsApiResponse;

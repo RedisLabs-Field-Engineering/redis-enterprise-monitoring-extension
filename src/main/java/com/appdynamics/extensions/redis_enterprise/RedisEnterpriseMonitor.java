@@ -61,33 +61,4 @@ public class RedisEnterpriseMonitor extends ABaseMonitor {
     protected List<Map<String, ?>> getServers () {
         return (List<Map<String, ?>>) getContextConfiguration().getConfigYml().get(Constants.SERVERS);
     }
-
-    public static void main(String[] args) throws TaskExecutionException, IOException {
-
-        ConsoleAppender ca = new ConsoleAppender();
-        ca.setWriter(new OutputStreamWriter(System.out));
-        ca.setLayout(new PatternLayout("%-5p [%t]: %m%n"));
-        ca.setThreshold(Level.DEBUG);
-        org.apache.log4j.Logger.getRootLogger().addAppender(ca);
-
-
-        RedisEnterpriseMonitor monitor = new RedisEnterpriseMonitor();
-        final Map<String, String> taskArgs = Maps.newHashMap();
-        taskArgs.put("config-file", "/Users/vishaka.sekar/AppDynamics/redis-enterprise-monitoring-extension/src/main/resources/config/config.yml");
-        taskArgs.put("metrics-file", "/Users/vishaka.sekar/AppDynamics/redis-enterprise-monitoring-extension/src/main/resources/config/metrics.xml");
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(new Runnable() {
-            public void run() {
-                try {
-                    monitor.execute(taskArgs, null);
-                } catch (Exception e) {
-
-                    System.out.println("Error while running the task"+ e);
-                }
-            }
-        }, 2, 60, TimeUnit.SECONDS);
-
-    }
-
-
 }
