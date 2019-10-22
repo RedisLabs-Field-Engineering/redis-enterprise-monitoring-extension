@@ -44,11 +44,11 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @PrepareForTest({HttpClientUtils.class})
 public class ObjectMetricsCollectorTaskTest {
 
-    MonitorContextConfiguration configuration;
-    MetricWriteHelper metricWriteHelper;
-    Phaser phaser  = new Phaser();
-    String metricPrefix =  "Custom Metrics|Redis Enterprise";
-    ArgumentCaptor<List> pathCaptor = ArgumentCaptor.forClass(List.class);
+    private MonitorContextConfiguration configuration;
+    private MetricWriteHelper metricWriteHelper;
+    private Phaser phaser  = new Phaser();
+    private String metricPrefix =  "Custom Metrics|Redis Enterprise";
+    private ArgumentCaptor<List> pathCaptor = ArgumentCaptor.forClass(List.class);
 
     @Before
     public void setUp(){

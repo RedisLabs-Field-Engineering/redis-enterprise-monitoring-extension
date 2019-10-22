@@ -42,23 +42,26 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
         AtomicInteger heartBeat = getConnectionStatus(server);
         metricWriteHelper.printMetric(configuration.getMetricPrefix() + "|" + server.get(Constants.DISPLAY_NAME).toString() + "|" + "Connection Status", String.valueOf(heartBeat.get()), "AVERAGE", "AVERAGE", "INDIVIDUAL");
         if (heartBeat.get() == 1) {
-            Map<String, ?> objects = (Map<String, ?>) config.get("objects");
+            Map<String, ?> objects = (Map<String, ?>) config.get("objects"); //DB, Node and Shards are "objects" in Redis Enterprise
             String uri = server.get(Constants.URI).toString();
             String displayName = server.get(Constants.DISPLAY_NAME).toString();
 
             if (objects.size() > 0) {
-                for (Map.Entry object : objects.entrySet()) {
+                for (Map.Entry<String, ?> object : objects.entrySet()) {
                     LOGGER.info("Starting metric collection for object [{}] on server [{}]", object.getKey(), displayName);
-                    if (!((List<String>) object.getValue()).isEmpty()) {
-                        collectObjectMetrics(displayName, uri, object.getKey().toString(), (List<String>) object.getValue());
+                    String objectType = object.getKey(); // Db, node or shard
+                    List<String> objectNames = (List<String>) object.getValue();
+                    if (!objectNames.isEmpty()) {
+                        collectObjectMetrics(displayName, uri, objectType, objectNames);
                     } else {
-                        LOGGER.info("No object names of type [{}] found in config.yml", object.getKey());
+                        LOGGER.info("No object names of type [{}] found in config.yml", objectType);
                     }
                 }
             }
             else{
                 LOGGER.info("No object names found in config.yml, not collecting Db Metrics, Shard Metrics or Node Metrics");
             }
+            //Redis Enterprise provides cluster level metrics
             collectClusterMetrics(displayName, uri);
         }
         LOGGER.info("Cannot connect to cluster {} ", server.get(Constants.DISPLAY_NAME).toString());
@@ -93,7 +96,6 @@ public class RedisEnterpriseMonitorTask implements AMonitorTaskRunnable {
     private void collectClusterMetrics (String displayName, String uri){
         ClusterMetricsCollectorTask clusterMetricsCollectorTask = new ClusterMetricsCollectorTask(displayName, uri, configuration, metricWriteHelper, phaser);
         configuration.getContext().getExecutorService().execute("ClusterMetricsTask", clusterMetricsCollectorTask);
-        LOGGER.debug("Finished all metrics collection for {}", displayName);
     }
 
     @Override

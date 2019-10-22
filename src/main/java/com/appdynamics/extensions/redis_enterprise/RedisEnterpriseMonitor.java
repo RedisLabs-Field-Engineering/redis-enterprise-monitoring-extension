@@ -49,7 +49,6 @@ public class RedisEnterpriseMonitor extends ABaseMonitor {
     @Override
     protected void doRun (TasksExecutionServiceProvider tasksExecutionServiceProvider) {
         List<Map<String, ?>> servers =  getServers();
-
         for (Map<String, ?> server : servers) {
             RedisEnterpriseMonitorTask task = new RedisEnterpriseMonitorTask(tasksExecutionServiceProvider.getMetricWriteHelper(), this.getContextConfiguration(),server);
             AssertUtils.assertNotNull(server.get(Constants.DISPLAY_NAME), "The displayName can not be null");

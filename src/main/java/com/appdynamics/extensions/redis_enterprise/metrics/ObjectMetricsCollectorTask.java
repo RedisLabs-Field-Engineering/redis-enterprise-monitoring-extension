@@ -48,6 +48,7 @@ public class ObjectMetricsCollectorTask implements  Runnable {
         } finally {
             phaser.arriveAndDeregister();
         }
+
     }
 
     private void collectMetrics (String displayName, String uri, List<String> objectNames, Stat statistic) {

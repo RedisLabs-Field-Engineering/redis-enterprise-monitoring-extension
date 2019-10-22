@@ -45,10 +45,10 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 public class ObjectMetricsCollectorSubTaskTest {
 
-    MonitorContextConfiguration configuration;
-    MetricWriteHelper metricWriteHelper;
-    Phaser phaser  = new Phaser();
-    String metricPrefix =  "Custom Metrics|Redis Enterprise";
+    private MonitorContextConfiguration configuration;
+    private MetricWriteHelper metricWriteHelper;
+    private Phaser phaser  = new Phaser();
+    private String metricPrefix =  "Custom Metrics|Redis Enterprise";
     ArgumentCaptor<List> pathCaptor = ArgumentCaptor.forClass(List.class);
 
     @Before
