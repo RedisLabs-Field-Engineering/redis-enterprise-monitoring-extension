@@ -45,7 +45,7 @@ public class ObjectMetricsCollectorTask implements  Runnable {
         try {
             collectMetrics(displayName, uri, objectNames, statistic);
         }catch(Exception e ){
-            LOGGER.info("Exception while collecting metrics for server {} - {}", displayName , e);
+            LOGGER.info("Exception while collecting metrics for server {}", displayName , e);
         } finally {
             phaser.arriveAndDeregister();
         }
@@ -60,7 +60,7 @@ public class ObjectMetricsCollectorTask implements  Runnable {
                 }
             }
             else {
-                LOGGER.debug("Please provide statistic url {}", statistic.getName());
+                LOGGER.debug("statsUrl is null. Please provide statistic url for [{}]", statistic.getName());
             }
     }
 
@@ -101,7 +101,7 @@ public class ObjectMetricsCollectorTask implements  Runnable {
                 idObjectNamePairs.add(idObjectNamePair);
             }
             else{
-                LOGGER.info("[{}] not found in Redis Enterprise server {}",objectNamePattern, displayName);
+                LOGGER.debug("[{}] not found in Redis Enterprise server {}",objectNamePattern, displayName);
             }
 
         }
@@ -138,14 +138,14 @@ public class ObjectMetricsCollectorTask implements  Runnable {
     private boolean isActive (String objectName, JsonNode jsonNode, String statType){
 
         if(jsonNode.get("status").getTextValue().equalsIgnoreCase("active")){
-            LOGGER.info("Object [{}] is in active state",objectName);
+            LOGGER.debug("Object [{}] is in active state",objectName);
             metricWriteHelper.printMetric(configuration.getMetricPrefix() + "|" +
                     displayName + "|" + statType + "|"+ objectName + "|" +
                     "Status", "1", "OBSERVATION", "CURRENT", "INDIVIDUAL");
             return true;
         }
         else{
-            LOGGER.info("Object [{}] is in [{}] state, not collection metrics", objectName, jsonNode.get("status").getTextValue() );
+            LOGGER.debug("Object [{}] is in [{}] state, not collection metrics", objectName, jsonNode.get("status").getTextValue() );
             metricWriteHelper.printMetric(configuration.getMetricPrefix() + "|" +
                     displayName + "|" + statType + "|" + objectName +"|"
                     + "Status" , "0", "OBSERVATION", "CURRENT", "INDIVIDUAL");

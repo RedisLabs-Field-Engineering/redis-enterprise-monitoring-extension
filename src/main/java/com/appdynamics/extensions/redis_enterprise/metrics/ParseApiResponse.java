@@ -5,6 +5,7 @@ import com.appdynamics.extensions.redis_enterprise.config.Stat;
 import com.appdynamics.extensions.util.JsonUtils;
 import com.google.common.collect.Lists;
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
@@ -19,6 +20,7 @@ class ParseApiResponse {
     private static final Logger LOGGER = ExtensionsLoggerFactory.getLogger(ParseApiResponse.class);
     private JsonNode metricsApiResponse;
     private String metricPrefix;
+    private static ObjectMapper objectMapper = new ObjectMapper();
     private List<Metric> metricList = Lists.newArrayList();
 
      ParseApiResponse(JsonNode metricsApiResponse, String metricPrefix ){
@@ -38,17 +40,13 @@ class ParseApiResponse {
 
                  String value = JsonUtils.getTextValue(jsonNode, metricFromConfig.getAttr());
                  if (value != null) {
-                     LOGGER.info("Processing metric [{}] ", metricFromConfig.getAttr());
+                     LOGGER.debug("Processing metric [{}] ", metricFromConfig.getAttr());
                      metricPathTokens = metricFromConfig.getAttr().split("\\|");
-                     Map<String, Object> props = new HashMap<>();
-                     props.put("aggregationType", metricFromConfig.getAggregationType());
-                     props.put("clusterRollUpType", metricFromConfig.getClusterRollUpType());
-                     props.put("timeRollUpType", metricFromConfig.getTimeRollUpType());
-                     props.put("alias", metricFromConfig.getAlias()); //todo: convert, multiplier
-                     Metric metric = new Metric(metricFromConfig.getAttr(), value, props, metricPrefix, metricPathTokens);
+                     Map<String, String> propertiesMap = objectMapper.convertValue(metricFromConfig, Map.class);
+                     Metric metric = new Metric(metricFromConfig.getAttr(), value, propertiesMap, metricPrefix, metricPathTokens);
                      metricList.add(metric);
                  } else {
-                     LOGGER.info("Metric [{}] not found in response", metricFromConfig.getAttr());
+                     LOGGER.debug("Metric [{}] not found in response", metricFromConfig.getAttr());
                  }
              }
              return metricList;
