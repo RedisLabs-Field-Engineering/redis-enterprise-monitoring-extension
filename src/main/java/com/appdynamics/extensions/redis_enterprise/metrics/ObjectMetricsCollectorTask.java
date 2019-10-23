@@ -101,7 +101,7 @@ public class ObjectMetricsCollectorTask implements  Runnable {
                 idObjectNamePairs.add(idObjectNamePair);
             }
             else{
-                LOGGER.info("[{}] not found in Redis Enterprise",objectNamePattern);
+                LOGGER.info("[{}] not found in Redis Enterprise server {}",objectNamePattern, displayName);
             }
 
         }
@@ -131,7 +131,7 @@ public class ObjectMetricsCollectorTask implements  Runnable {
                 }
             }
         }
-        LOGGER.info("The pattern [{}] did not match any active object in Redis Enterprise", objectNamePattern);
+        LOGGER.info("The pattern [{}] did not match any active object in Redis Enterprise server {}", objectNamePattern, displayName);
         return new ImmutablePair<>("-1", "NaN");
     }
 

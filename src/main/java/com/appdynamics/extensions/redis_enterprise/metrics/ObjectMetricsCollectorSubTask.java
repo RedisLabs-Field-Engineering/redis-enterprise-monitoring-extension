@@ -63,7 +63,7 @@ public class ObjectMetricsCollectorSubTask implements Runnable {
 
     private void collectMetrics (Stat stat) {
 
-        LOGGER.debug("Extracting metricsFromConfig for [{}] ", statsEndpointUrl + uid);
+        LOGGER.debug("Extracting metricsFromConfig for [{}] for objectName [{}] ", statsEndpointUrl, objectName);
         ParseApiResponse parser = new ParseApiResponse(jsonNode, monitorContextConfiguration.getMetricPrefix()
                 + "|" + serverName + "|" + stat.getType() + "|" + objectName);
         List<Metric> metricsList = parser.extractMetricsFromApiResponse(stat, jsonNode);

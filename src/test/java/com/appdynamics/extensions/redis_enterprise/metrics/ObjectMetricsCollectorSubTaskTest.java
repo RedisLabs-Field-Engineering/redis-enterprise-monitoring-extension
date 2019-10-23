@@ -69,90 +69,90 @@ public class ObjectMetricsCollectorSubTaskTest {
         phaser.register();
     }
 
-    @Test
-    public void testMetricExtractionFromApiResponseForObjects(){
-        String displayName = "myCluster";
-        String uid = "3";
-        String objectStatsEndpoint = "https://localhost:9443/v1/bdbs/stats/last/3";
-        String objectName = "test";
-
-        PowerMockito.mockStatic(HttpClientUtils.class);
-        when(HttpClientUtils.getResponseAsJson(any(CloseableHttpClient.class), anyString(), any(Class.class))).thenAnswer(
-                new Answer() {
-                    public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                        ObjectMapper mapper = new ObjectMapper();
-                        String url = (String) invocationOnMock.getArguments()[1];
-                        File file = null;
-                        if(url.contains("bdbs/stats")) {
-                             file = new File("src/test/resources/bdbs-stats.json");
-                        }
-                        else if(url.contains("cluster/stats")){
-                             file = new File("src/test/resources/cluster-stats.json");
-                        }
-                        JsonNode objectNode = mapper.readValue(file, JsonNode.class);
-                        return objectNode;
-                    }
-                });
-        com.appdynamics.extensions.redis_enterprise.config.Metric[] metrics = new Metric[1];
-        com.appdynamics.extensions.redis_enterprise.config.Metric metric = new com.appdynamics.extensions.redis_enterprise.config.Metric();
-        metric.setAttr("conns");
-        metric.setAlias("conns");
-        metrics[0] = metric;
-        Stat stat = new Stat();
-        stat.setMetric(metrics);
-
-        Stat[] childStatArray = new Stat[1];
-
-        Stat childStat = new Stat();
-        childStat.setName("conns1");
-        com.appdynamics.extensions.redis_enterprise.config.Metric[] childMetrics = new Metric[1];
-        com.appdynamics.extensions.redis_enterprise.config.Metric childMetric = new com.appdynamics.extensions.redis_enterprise.config.Metric();
-        childMetric.setAttr("metric1");
-        childMetric.setAlias("metric1");
-        childMetrics[0] = childMetric;
-        childStatArray[0] = childStat;
-        childStat.setMetric(childMetrics);
-
-        Stat grandchildStat = new Stat();
-        Stat[] grandchildStatArray = new Stat[1];
-        grandchildStat.setName("conns2");
-        com.appdynamics.extensions.redis_enterprise.config.Metric[] childMetrics2 = new Metric[1];
-        com.appdynamics.extensions.redis_enterprise.config.Metric childMetric2 = new com.appdynamics.extensions.redis_enterprise.config.Metric();
-        childMetric2.setAttr("metric2");
-        childMetric2.setAlias("metric2");
-        childMetrics2[0] = childMetric2;
-        grandchildStatArray[0] = grandchildStat;
-        grandchildStat.setMetric(childMetrics2);
-
-        childStat.setStats(grandchildStatArray);
-        stat.setStats(childStatArray);
-
-        //cluster stat
-        Stats stats = new Stats();
-        Stat[] superStatArray = new Stat[1];
-        Stat clusterStat = new Stat();
-        clusterStat.setType("cluster");
-        clusterStat.setMetric(metrics);
-        superStatArray[0] = clusterStat;
-        stats.setStat(superStatArray);
-        when(configuration.getMetricsXml()).thenReturn(stats);
-
-        ObjectMetricsCollectorSubTask objectMetricsCollectorSubTask = new ObjectMetricsCollectorSubTask(displayName, objectStatsEndpoint, uid, objectName, configuration, metricWriteHelper, stat, phaser);
-        objectMetricsCollectorSubTask.run();
-
-        ClusterMetricsCollectorTask clusterMetricsCollectorTask = new ClusterMetricsCollectorTask("myCluster", "https://localhost:9443/cluster/stats/last",configuration,metricWriteHelper,phaser);
-        clusterMetricsCollectorTask.run();
-
-        verify(metricWriteHelper, times(2)).transformAndPrintMetrics(pathCaptor.capture());
-        List<com.appdynamics.extensions.metrics.Metric> objectMetricList = pathCaptor.getAllValues().get(0);
-
-        Assert.assertTrue(objectMetricList.get(0).getMetricName().equals(childMetric2.getAlias()));
-        Assert.assertTrue(objectMetricList.get(1).getMetricName().equals(childMetric.getAlias()));
-        Assert.assertTrue(objectMetricList.get(2).getMetricName().equals(metric.getAlias()));
-
-        List<com.appdynamics.extensions.metrics.Metric> clusterMetriclist = pathCaptor.getAllValues().get(1);
-        Assert.assertTrue(clusterMetriclist.get(0).getMetricName().equals(metric.getAlias()));
-    }
+//    @Test
+//    public void testMetricExtractionFromApiResponseForObjects(){
+//        String displayName = "myCluster";
+//        String uid = "3";
+//        String objectStatsEndpoint = "https://localhost:9443/v1/bdbs/stats/last/3";
+//        String objectName = "test";
+//
+//        PowerMockito.mockStatic(HttpClientUtils.class);
+//        when(HttpClientUtils.getResponseAsJson(any(CloseableHttpClient.class), anyString(), any(Class.class))).thenAnswer(
+//                new Answer() {
+//                    public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+//                        ObjectMapper mapper = new ObjectMapper();
+//                        String url = (String) invocationOnMock.getArguments()[1];
+//                        File file = null;
+//                        if(url.contains("bdbs/stats")) {
+//                             file = new File("src/test/resources/bdbs-stats.json");
+//                        }
+//                        else if(url.contains("cluster/stats")){
+//                             file = new File("src/test/resources/cluster-stats.json");
+//                        }
+//                        JsonNode objectNode = mapper.readValue(file, JsonNode.class);
+//                        return objectNode;
+//                    }
+//                });
+//        com.appdynamics.extensions.redis_enterprise.config.Metric[] metrics = new Metric[1];
+//        com.appdynamics.extensions.redis_enterprise.config.Metric metric = new com.appdynamics.extensions.redis_enterprise.config.Metric();
+//        metric.setAttr("conns");
+//        metric.setAlias("conns");
+//        metrics[0] = metric;
+//        Stat stat = new Stat();
+//        stat.setMetric(metrics);
+//
+//        Stat[] childStatArray = new Stat[1];
+//
+//        Stat childStat = new Stat();
+//        childStat.setName("conns1");
+//        com.appdynamics.extensions.redis_enterprise.config.Metric[] childMetrics = new Metric[1];
+//        com.appdynamics.extensions.redis_enterprise.config.Metric childMetric = new com.appdynamics.extensions.redis_enterprise.config.Metric();
+//        childMetric.setAttr("metric1");
+//        childMetric.setAlias("metric1");
+//        childMetrics[0] = childMetric;
+//        childStatArray[0] = childStat;
+//        childStat.setMetric(childMetrics);
+//
+//        Stat grandchildStat = new Stat();
+//        Stat[] grandchildStatArray = new Stat[1];
+//        grandchildStat.setName("conns2");
+//        com.appdynamics.extensions.redis_enterprise.config.Metric[] childMetrics2 = new Metric[1];
+//        com.appdynamics.extensions.redis_enterprise.config.Metric childMetric2 = new com.appdynamics.extensions.redis_enterprise.config.Metric();
+//        childMetric2.setAttr("metric2");
+//        childMetric2.setAlias("metric2");
+//        childMetrics2[0] = childMetric2;
+//        grandchildStatArray[0] = grandchildStat;
+//        grandchildStat.setMetric(childMetrics2);
+//
+//        childStat.setStats(grandchildStatArray);
+//        stat.setStats(childStatArray);
+//
+//        //cluster stat
+//        Stats stats = new Stats();
+//        Stat[] superStatArray = new Stat[1];
+//        Stat clusterStat = new Stat();
+//        clusterStat.setType("cluster");
+//        clusterStat.setMetric(metrics);
+//        superStatArray[0] = clusterStat;
+//        stats.setStat(superStatArray);
+//        when(configuration.getMetricsXml()).thenReturn(stats);
+//
+//        ObjectMetricsCollectorSubTask objectMetricsCollectorSubTask = new ObjectMetricsCollectorSubTask(displayName, objectStatsEndpoint, uid, objectName, configuration, metricWriteHelper, stat, phaser);
+//        objectMetricsCollectorSubTask.run();
+//
+//        ClusterMetricsCollectorTask clusterMetricsCollectorTask = new ClusterMetricsCollectorTask("myCluster", "https://localhost:9443/cluster/stats/last",configuration,metricWriteHelper,phaser);
+//        clusterMetricsCollectorTask.run();
+//
+//        verify(metricWriteHelper, times(2)).transformAndPrintMetrics(pathCaptor.capture());
+//        List<com.appdynamics.extensions.metrics.Metric> objectMetricList = pathCaptor.getAllValues().get(0);
+//
+//        Assert.assertTrue(objectMetricList.get(0).getMetricName().equals(childMetric2.getAlias()));
+//        Assert.assertTrue(objectMetricList.get(1).getMetricName().equals(childMetric.getAlias()));
+//        Assert.assertTrue(objectMetricList.get(2).getMetricName().equals(metric.getAlias()));
+//
+//        List<com.appdynamics.extensions.metrics.Metric> clusterMetriclist = pathCaptor.getAllValues().get(1);
+//        Assert.assertTrue(clusterMetriclist.get(0).getMetricName().equals(metric.getAlias()));
+//    }
 
     //todo: test for when metric not present in redis
 
