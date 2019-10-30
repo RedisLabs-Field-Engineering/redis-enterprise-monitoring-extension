@@ -67,7 +67,7 @@ customDashboard:
   dashboardName: "Redis EnterPrise Monitor Dashboard"
   sslCertCheckEnabled: true
   # Update the path to the dashboard file.
-  pathToSIMDashboard: "monitors/RedisEnterpriseMonitor/CustomDashboard_Redis+Enterprise_Dashboard.json"
+  pathToSIMDashboard: "monitors/RedisEnterpriseMonitor/Redis+Enterprise+Dashboard.json"
   pathToNormalDashboard:
   periodicDashboardCheckInSeconds: 300
 
@@ -83,7 +83,7 @@ controllerInfo:
   password: "" # -Dappdynamics.agent.monitors.controller.password
   encryptedPassword: "" # -Dappdynamics.agent.monitors.controller.encryptedPassword
   accountAccessKey: "" # -Dappdynamics.agent.accountAccessKey
-  account: "customer1" # -Dappdynamics.agent.accountName
+  account: "" # -Dappdynamics.agent.accountName
   machinePath: "" # -Dappdynamics.machine.agent.hierarchyPath
   simEnabled: false # -Dappdynamics.sim.enabled
   applicationName: "" # -Dappdynamics.agent.applicationName

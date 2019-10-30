@@ -135,7 +135,7 @@
                                     <fileset dir="src/main/resources/config" includes="config.yml"/>
                                     <fileset dir="src/main/resources/config" includes="monitor.xml"/>
                                     <fileset dir="src/main/resources/config" includes="metrics.xml"/>
-                                    <fileset dir="src/main/resources/config" includes="CustomDashboard_Redis+Enterprise_Dashboard.json"/>
+                                    <fileset dir="src/main/resources/config" includes="Redis+Enterprise+Dashboard.json"/>
                                 </copy>
                                 <copy todir="${target.dir}">
                                     <fileset dir="${build.directory}" includes="${project.artifactId}.${project.packaging}"/>
