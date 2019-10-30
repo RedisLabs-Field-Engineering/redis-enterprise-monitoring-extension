@@ -1,7 +1,7 @@
 sleep 30
 redisstatus=$(curl -w "%{http_code}\n" http://localhost:8086/v1/bootstrap -o /dev/null)
 echo Redis Enterprise returned $redisstatus
-if [ $redisstatus == 200 ]
+if [[ $redisstatus = 200 ]]
 then
     echo Starting to initialize Redis Enterprise
     ipaddr=$(curl http://localhost:8086/v1/bootstrap |\jq '.local_node_info.available_addresses[0].address')
@@ -12,11 +12,11 @@ then
     sleep 20
     code=$(curl -w "%{http_code}\n" -u "extensions@appdynamics.com:123456" http://localhost:8086/v1/cluster -o /dev/null)
     echo $code
-    if [ $code ==  200 ]
+    if [[ $code ==  200 ]]
     then
       echo Creating a DB
       create_db=$(curl POST -H 'Content-Type: application/json' -H 'cache-control: no-cache' -d '{"name": "db2", "type": "redis", "memory_size": 1073}' -w "%{http_code}\n" -u "extensions@appdynamics.com:123456" http://localhost:8086/v1/bdbs -o /dev/null)
-      if [ $code ==  200 ]
+      if [[ $code ==  200 ]]
       then
         echo Done Creating DB
       else
