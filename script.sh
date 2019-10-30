@@ -1,5 +1,6 @@
 sleep 30
 redisstatus=$(curl -w "%{http_code}\n" http://localhost:8086/v1/bootstrap -o /dev/null)
+echo Redis Enterprise returned $redisstatus
 if [ $redisstatus == 200 ]
 then
     echo Starting to initialize Redis Enterprise
