@@ -72,7 +72,7 @@ public class RedisEnterpriseMonitor extends ABaseMonitor {
 
         RedisEnterpriseMonitor monitor = new RedisEnterpriseMonitor();
         final Map<String, String> taskArgs = Maps.newHashMap();
-        taskArgs.put("config-file", "/Users/vishaka.sekar/AppDynamics/redis-enterprise-monitoring-extension/src/main/resources/config/config.yml");
+        taskArgs.put("config-file", "/Users/vishaka.sekar/AppDynamics/redis-enterprise-monitoring-extension/src/integration-test/resources/conf/config.yml");
         taskArgs.put("metrics-file", "/Users/vishaka.sekar/AppDynamics/redis-enterprise-monitoring-extension/src/main/resources/config/metrics.xml");
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(new Runnable() {

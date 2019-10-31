@@ -1,5 +1,5 @@
 #If SIM is enabled, use this metricPrefix
-metricPrefix: Custom Metrics|Redis Enterprise|
+metricPrefix: "Custom Metrics|Redis Enterprise|"
 
 # If SIM is not enabled, use this
 #Make sure to replace <COMPONENT_ID> with the appropriate one from your environment.
@@ -67,7 +67,7 @@ customDashboard:
   dashboardName: "Redis EnterPrise Monitor Dashboard"
   sslCertCheckEnabled: true
   # Update the path to the dashboard file.
-  pathToSIMDashboard: "monitors/RedisEnterpriseMonitor/Redis+Enterprise+Dashboard.json"
+  pathToSIMDashboard: "/Users/vishaka.sekar/AppDynamics/redis-enterprise-monitoring-extension/src/main/resources/config/Redis+Enterprise+Dashboard.json"
   pathToNormalDashboard:
   periodicDashboardCheckInSeconds: 300
 
