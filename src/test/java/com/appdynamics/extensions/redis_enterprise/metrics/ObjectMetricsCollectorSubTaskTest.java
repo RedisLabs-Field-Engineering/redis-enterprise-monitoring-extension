@@ -156,6 +156,4 @@ public class ObjectMetricsCollectorSubTaskTest {
         Assert.assertTrue(clusterMetriclist.get(0).getMetricName().equals(metric.getAlias()));
     }
 
-    //todo: test for when metric not present in redis
-
 }

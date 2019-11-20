@@ -13,6 +13,7 @@ import com.appdynamics.extensions.yml.YmlReader;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +34,7 @@ import java.util.concurrent.Phaser;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 /**
@@ -49,6 +50,7 @@ public class ObjectMetricsCollectorTaskTest {
     private Phaser phaser  = new Phaser();
     private String metricPrefix =  "Custom Metrics|Redis Enterprise";
     private ArgumentCaptor<List> pathCaptor = ArgumentCaptor.forClass(List.class);
+    private ArgumentCaptor<String> pathCaptorString = ArgumentCaptor.forClass(String.class);
 
     @Before
     public void setUp(){
@@ -101,13 +103,17 @@ public class ObjectMetricsCollectorTaskTest {
         childMetrics[0] = childMetric;
 
         stat.setMetric(childMetrics);
+        stat.setType("database");
         List<String> objectNames = new ArrayList<>();
         objectNames.add("test");
 
         ObjectMetricsCollectorTask objectMetricsCollectorTask = new ObjectMetricsCollectorTask("displayname", "localhost:8080", objectNames, stat, configuration, metricWriteHelper, phaser );
         objectMetricsCollectorTask.run();
 
-        //todo : assert for method calls
+        verify(metricWriteHelper, times(1)).printMetric(pathCaptorString.capture(), pathCaptorString.capture(), pathCaptorString.capture(), pathCaptorString.capture(), pathCaptorString.capture());
+        List<String> objectMetricList = pathCaptorString.getAllValues();
+        Assert.assertEquals(objectMetricList.get(0), "Custom Metrics|Redis Enterprise|displayname|database|test|Status");
+        Assert.assertEquals(objectMetricList.get(1), "1");
     }
 
 
