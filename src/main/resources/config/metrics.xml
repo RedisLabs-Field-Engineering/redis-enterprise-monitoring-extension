@@ -2,7 +2,7 @@
 
 
     <!--DB Metrics -->
-    <stat type="database" url = "/v1/bdbs" statsUrl = "/v1/bdbs/stats/last" id = "uid" name= "name">
+    <stat type="database" url = "/v1/bdbs" statsUrl = "/v1/bdbs/stats/last" idElement = "uid" nameElement = "name">
         <metric attr="no_of_keys" alias="Number of Keys" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "INDIVIDUAL"/>
         <metric attr="evicted_objects" alias="Evicted Objects" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
         <metric attr="expired_objects" alias="Expired Objects" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
@@ -66,7 +66,7 @@
     </stat>
 
     <!-- Node Metrics -->
-    <stat type="node" url = "/v1/nodes" statsUrl = "/v1/nodes/stats/last" id = "uid" name= "addr">
+    <stat type="node" url = "/v1/nodes" statsUrl = "/v1/nodes/stats/last" idElement = "uid" nameElement = "addr">
     <metric attr="free_memory" alias="Free Memory" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
     <metric attr="available_memory" alias="Available Memory" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
     <metric attr="provisional_memory" alias="Provisional Memory" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
@@ -94,7 +94,7 @@
     </stat>
 
     <!-- Shard Metrics -->
-    <stat type="shard" url = "/v1/shards" statsUrl = "/v1/shards/stats/last" id = "uid" name= "uid" >
+    <stat type="shard" url = "/v1/shards" statsUrl = "/v1/shards/stats/last" idElement = "uid" nameElement = "uid" >
         <metric attr="aof_rewrite_inprog" alias="AOF Rewrites In Progress " aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
         <metric attr="avg_ttl" alias="Avg TTL" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
         <metric attr="bigstore_iops" alias="BigStore IO" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>
@@ -145,7 +145,7 @@
     </stat>
 
     <!-- Cluster Metrics -->
-    <stat type="cluster" url = "" statsUrl = "/v1/cluster/stats/last" id = "" name= ""  >
+    <stat type="cluster" url = "" statsUrl = "/v1/cluster/stats/last" idElement = "" nameElement = ""  >
         <metric attr="free_memory" alias="Free Memory" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
         <metric attr="available_memory" alias="Available Memory" aggregationType = "OBSERVATION" timeRollUpType = "CURRENT" clusterRollUpType = "COLLECTIVE"/>
         <metric attr="provisional_memory" alias="Provisional Memory" aggregationType = "AVERAGE" timeRollUpType = "AVERAGE" clusterRollUpType = "INDIVIDUAL"/>

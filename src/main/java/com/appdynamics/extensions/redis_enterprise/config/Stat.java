@@ -21,11 +21,11 @@ public class Stat {
     @XmlAttribute(name = Constants.STATS_URL)
     private String statsUrl;
 
-    @XmlAttribute(name = Constants.NAME)
-    private String name;
+    @XmlAttribute(name = Constants.NAME_ELEMENT)
+    private String nameElement;
 
-    @XmlAttribute(name = Constants.ID)
-    private String id;
+    @XmlAttribute(name = Constants.ID_ELEMENT)
+    private String idElement;
 
     @XmlAttribute(name = Constants.URL)
     private String url;
@@ -73,19 +73,19 @@ public class Stat {
         this.statsUrl = statsUrl;
     }
 
-    public String getName () {
-        return name;
+    public String getNameElement() {
+        return nameElement;
     }
 
-    public void setName (String name) {
-        this.name = name;
+    public void setNameElement(String nameElement) {
+        this.nameElement = nameElement;
     }
 
-    public String getId () {
-        return id;
+    public String getIdElement() {
+        return idElement;
     }
 
-    public void setId (String id) {
-        this.id = id;
+    public void setIdElement(String idElement) {
+        this.idElement = idElement;
     }
 }
