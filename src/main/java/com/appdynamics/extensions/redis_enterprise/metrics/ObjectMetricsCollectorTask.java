@@ -84,8 +84,6 @@ public class ObjectMetricsCollectorTask implements  Runnable {
 
             if (objectDetailsJson != null && objectDetailsJson.size() > 0) {
                 collectObjectStats(displayName, objectNames, stat, statsUrl, objectDetailsJson);
-                //print status metric for all discovered objects
-                printStatusMetric(objectNameToStatus);
             }
             else {
                 LOGGER.info("Did not find ID for the objectNames [{}]", objectNames);
@@ -101,6 +99,11 @@ public class ObjectMetricsCollectorTask implements  Runnable {
         JsonNode objectsStatsJson;
         objectsStatsJson = HttpClientUtils.getResponseAsJson(this.configuration.getContext().getHttpClient(), statsUrl,  JsonNode.class);
         Map<String, String> idToNameMap = getIdToNameMap(objectDetailsJson, objectNames, stat.getIdElement(), stat.getNameElement(), stat.getType());
+
+        //print status metric for all discovered objects
+        printStatusMetric(objectNameToStatus);
+
+        //collect and print other metrics
         for (Map.Entry<String, String> idNamePair : idToNameMap.entrySet()) {
             String objectId =  idNamePair.getKey();
             String objectName =  idNamePair.getValue();
@@ -205,8 +208,8 @@ public class ObjectMetricsCollectorTask implements  Runnable {
     private void printStatusMetric(Map<String, String> objectNameToStatus) {
         List<Metric> metricList = Lists.newArrayList();
         for(Map.Entry objectStatus : objectNameToStatus.entrySet()) {
-            Metric metric = new Metric("Status", objectStatus.getKey().toString(), configuration.getMetricPrefix() + "|" +
-                    displayName + "|" + objectStatus.getValue(),  "OBSERVATION", "CURRENT", "INDIVIDUAL");
+            Metric metric = new Metric("Status", objectStatus.getValue().toString(), configuration.getMetricPrefix() + "|" +
+                    displayName + "|" + objectStatus.getKey() + "|" + "Status",  "OBSERVATION", "CURRENT", "INDIVIDUAL");
             metricList.add(metric);
         }
         metricWriteHelper.transformAndPrintMetrics(metricList);

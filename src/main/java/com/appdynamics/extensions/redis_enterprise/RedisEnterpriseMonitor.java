@@ -60,4 +60,5 @@ public class RedisEnterpriseMonitor extends ABaseMonitor {
     protected List<Map<String, ?>> getServers () {
         return (List<Map<String, ?>>) getContextConfiguration().getConfigYml().get(Constants.SERVERS);
     }
+
 }
