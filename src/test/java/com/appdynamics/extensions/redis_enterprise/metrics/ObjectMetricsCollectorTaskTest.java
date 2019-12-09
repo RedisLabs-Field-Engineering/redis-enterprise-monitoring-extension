@@ -129,7 +129,10 @@ public class ObjectMetricsCollectorTaskTest {
                         ObjectMapper mapper = new ObjectMapper();
                         String url = (String) invocationOnMock.getArguments()[1];
                         File file = null;
-                        if(url.contains("bdbs")) {
+                        if(url.contains("/v1/bdbs/stats/last")) {
+                            file = new File("src/test/resources/bdbs-stats.json");
+                        }
+                        else if(url.contains("/v1/bdbs/")) {
                             file = new File("src/test/resources/objects.json");
                         }
                         JsonNode objectNode = mapper.readValue(file, JsonNode.class);
@@ -139,8 +142,8 @@ public class ObjectMetricsCollectorTaskTest {
 
         com.appdynamics.extensions.redis_enterprise.config.Metric[] childMetrics = new Metric[1];
         com.appdynamics.extensions.redis_enterprise.config.Metric childMetric = new com.appdynamics.extensions.redis_enterprise.config.Metric();
-        childMetric.setAttr("metric1");
-        childMetric.setAlias("metric1");
+        childMetric.setAttr("no_of_keys");
+        childMetric.setAlias("no_of_keys");
         childMetrics[0] = childMetric;
 
         stat.setMetric(childMetrics);
@@ -152,8 +155,9 @@ public class ObjectMetricsCollectorTaskTest {
         objectMetricsCollectorTask.run();
 
         verify(metricWriteHelper, times(1)).transformAndPrintMetrics(pathCaptor.capture());
-        List<Metric> objectMetricList = pathCaptor.getAllValues().get(0);
-        Assert.assertTrue(objectMetricList.size() == 1);
+        List<com.appdynamics.extensions.metrics.Metric> objectMetricList = pathCaptor.getAllValues().get(0);
+        Assert.assertEquals(1,  objectMetricList.size());
+        Assert.assertEquals("Custom Metrics|Redis Enterprise|displayname|database|redis-test|Status", objectMetricList.get(0).getMetricPath());
     }
 
     @Test
@@ -171,7 +175,10 @@ public class ObjectMetricsCollectorTaskTest {
                         ObjectMapper mapper = new ObjectMapper();
                         String url = (String) invocationOnMock.getArguments()[1];
                         File file = null;
-                        if(url.contains("bdbs")) {
+                        if(url.contains("/v1/bdbs/stats/last")) {
+                            file = new File("src/test/resources/bdbs-stats.json");
+                        }
+                        else if(url.contains("bdbs")) {
                             file = new File("src/test/resources/objects.json");
                         }
                         JsonNode objectNode = mapper.readValue(file, JsonNode.class);
@@ -195,8 +202,10 @@ public class ObjectMetricsCollectorTaskTest {
         objectMetricsCollectorTask.run();
 
         verify(metricWriteHelper, times(1)).transformAndPrintMetrics(pathCaptor.capture());
-        List<Metric> objectMetricList = pathCaptor.getAllValues().get(0);
+        List<com.appdynamics.extensions.metrics.Metric> objectMetricList = pathCaptor.getAllValues().get(0);
         Assert.assertTrue(objectMetricList.size() == 2);
+        Assert.assertEquals("Custom Metrics|Redis Enterprise|displayname|database|test|Status", objectMetricList.get(0).getMetricPath());
+        Assert.assertEquals("Custom Metrics|Redis Enterprise|displayname|database|redis-test|Status", objectMetricList.get(1).getMetricPath());
     }
 
 
