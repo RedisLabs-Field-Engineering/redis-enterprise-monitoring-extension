@@ -57,7 +57,7 @@ servers:
     password: "admin"
     encryptedPassword: ""
     useSSL: "false"
-    displayName: "cluster1"   # cluster 2 endpoint
+    displayName: "cluster2"   # cluster 2 endpoint
 
 <<To add more clusters, simply add  each cluster here>>
 ```
@@ -69,6 +69,7 @@ If you get a valid output, that means your formatting is correct and you may mov
 ### Metrics.xml
 * The metrics.xml is a configurable file with the list of all metrics that the extension will fetch. 
 * The metrics.xml is pre-configured with all from [cluster/stats endpoint](https://storage.googleapis.com/rlecrestapi/rest-html/http_rest_api.html#get--v1-cluster-stats-last), [bdbs/stats endpoint](https://storage.googleapis.com/rlecrestapi/rest-html/http_rest_api.html#get--v1-bdbs-stats-last), [shards/stats endpoint](https://storage.googleapis.com/rlecrestapi/rest-html/http_rest_api.html#get--v1-shards-stats-last) and [nodes/stat endpoint](https://storage.googleapis.com/rlecrestapi/rest-html/http_rest_api.html#get--v1-nodes-stats-last).
+* Please un-comment metrics that are needed from metrics.xml.
 * The metrics.xml can be configured to report only those metrics that are required. Please remove or comment out metrics that you don't require. 
 * For configuring the metrics, the following properties can be used:
 
@@ -326,7 +327,7 @@ Always feel free to fork and contribute any changes directly via [GitHub](https:
 ## Version
 | Name                        |  Version                    | 
 | :---------------------------| :---------------------------|
-| Extension Version:          | 2.0.0                  |
+| Extension Version:          | 1.0.0                  |
 | Controller Compatibility:   | 2.2 or Later                |
 | Tested On:                  | Redis Enterprise Software v5.4.x       |
 | Operating System Tested On: | Mac OS, Linux               |

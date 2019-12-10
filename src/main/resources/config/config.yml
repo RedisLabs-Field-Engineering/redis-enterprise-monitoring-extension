@@ -29,14 +29,15 @@ objects:
   node: ["172.*"]
   shard: ["3"]
 
-connection:
-  socketTimeout: 5000 # Read Timeout
-  connectTimeout: 5000 # Connection Timeout
-
-  sslCertCheckEnabled: true #
-  sslCipherSuites: [] # Defaults to "default".
-  sslVerifyHostname: true
-  sslProtocols: [] # If null, by default TLSv1, TLSv1.1, TLSv1.2 are supported.
+#Un-comment if SSL is required
+#connection:
+#  socketTimeout: 5000 # Read Timeout
+#  connectTimeout: 5000 # Connection Timeout
+#
+#  sslCertCheckEnabled: true #
+#  sslCipherSuites: [] # Defaults to "default".
+#  sslVerifyHostname: true
+#  sslProtocols: [] # If null, by default TLSv1, TLSv1.1, TLSv1.2 are supported.
 
 #Converting PEM to JKS https://docs.oracle.com/cd/E35976_01/server.740/es_admin/src/tadm_ssl_convert_pem_to_jks.html
   sslTrustStorePath: "/path/to/truststore.jks" # If not set, will set value from "-Dappdynamics.agent.monitors.truststore.path=/path/cacerts" if present, else will set value as <MachineAgentHome>/conf/extensions-cacerts.jks.
