@@ -3,31 +3,31 @@ metricPrefix: "Custom Metrics|Redis Enterprise|"
 
 # If SIM is not enabled, use this
 #Make sure to replace <COMPONENT_ID> with the appropriate one from your environment.
-#To find the <COMPONENT_ID> in your environment, please follow the screen shot https://docs.appdynamics.com/display/PRO42/Build+a+Monitoring+Extension+Using+Java
-#metricPrefix: Server|Component:10|Custom Metrics|Redis Enterprise|
+#To find the COMPONENT_ID in your environment, please follow the screen shot https://docs.appdynamics.com/display/PRO42/Build+a+Monitoring+Extension+Using+Java
+#metricPrefix: Server|Component:<COMPONENT_ID>|Custom Metrics|Redis Enterprise|
 
 
 servers:
-    - uri: 'http://127.0.0.1:8080'
-      username: 'v@ad.com' # user should have privilege in Redis Enterprise to view stats and view info
-      password: 'test'
-      encryptedPassword: ''
-      useSSL: 'false'
-      displayName: 'myCluster'
+    - uri: "http://127.0.0.1:9443"
+      username: "admin@email.com" # user should have privileges in Redis Enterprise to view stats
+      password: "test"
+      encryptedPassword: ""
+      useSSL: "false"
+      displayName: "myCluster"
 
 # more servers go here
-#    - uri: 'https://localhost:9449'
-#      username: 'test@appdynamics.com'
-#      password: 'test@123'
-#      encryptedPassword: ''
-#      useSSL: 'true'
-#      displayName: 'testClsuter'
+#    - uri: "https://localhost:9449"
+#      username: "test@appdynamics.com"
+#      password: "test@123"
+#      encryptedPassword: ""
+#      useSSL: "true"
+#      displayName: "testCluster"
 
 # supports wildcards
 objects:
-  database: ['test1','test2', 'db.*']
-  node: ['172.*']
-  shard: ['3']
+  database: ["test1","test2", "db.*"]
+  node: ["172.*"]
+  shard: ["3"]
 
 connection:
   socketTimeout: 5000 # Read Timeout
@@ -67,7 +67,7 @@ customDashboard:
   dashboardName: "Redis EnterPrise Monitor Dashboard"
   sslCertCheckEnabled: true
   # Update the path to the dashboard file.
-  pathToSIMDashboard: "/Users/vishaka.sekar/AppDynamics/redis-enterprise-monitoring-extension/src/main/resources/config/Redis+Enterprise+Dashboard.json"
+  pathToSIMDashboard: "monitors/RedisEnterpriseMonitor/Redis+Enterprise+Dashboard.json"
   pathToNormalDashboard:
   periodicDashboardCheckInSeconds: 300
 
