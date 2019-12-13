@@ -8,7 +8,6 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +32,7 @@ class ParseApiResponse {
          if (metricsApiResponse != null) {
              if(stat.getStats()!=null){
                  for(Stat childStat: stat.getStats()) {
-                     extractMetricsFromApiResponse(childStat, JsonUtils.getNestedObject(jsonNode, childStat.getName()));
+                     extractMetricsFromApiResponse(childStat, JsonUtils.getNestedObject(jsonNode, childStat.getNameElement()));
                  }
              }
              for (com.appdynamics.extensions.redis_enterprise.config.Metric metricFromConfig : stat.getMetric()) {

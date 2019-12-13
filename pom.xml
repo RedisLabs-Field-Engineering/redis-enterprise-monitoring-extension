@@ -4,7 +4,7 @@
 
     <groupId>com.appdynamics.extensions</groupId>
     <artifactId>redis-enterprise-monitoring-extension</artifactId>
-    <version>1.0.2-Beta</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>redis-enterprise-monitoring-extension</name>
     <url>http://maven.apache.org</url>
@@ -62,11 +62,6 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.9</version>
         </dependency>
 
     </dependencies>
@@ -135,7 +130,7 @@
                                     <fileset dir="src/main/resources/config" includes="config.yml"/>
                                     <fileset dir="src/main/resources/config" includes="monitor.xml"/>
                                     <fileset dir="src/main/resources/config" includes="metrics.xml"/>
-                                    <fileset dir="src/main/resources/config" includes="CustomDashboard_Redis+Enterprise_Dashboard.json"/>
+                                    <fileset dir="src/main/resources/config" includes="Redis+Enterprise+Dashboard.json"/>
                                 </copy>
                                 <copy todir="${target.dir}">
                                     <fileset dir="${build.directory}" includes="${project.artifactId}.${project.packaging}"/>

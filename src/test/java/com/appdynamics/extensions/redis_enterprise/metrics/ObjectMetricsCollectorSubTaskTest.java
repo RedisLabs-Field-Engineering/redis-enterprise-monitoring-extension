@@ -106,7 +106,7 @@ public class ObjectMetricsCollectorSubTaskTest {
         Stat[] childStatArray = new Stat[1];
 
         Stat childStat = new Stat();
-        childStat.setName("conns1");
+        childStat.setNameElement("conns1");
         com.appdynamics.extensions.redis_enterprise.config.Metric[] childMetrics = new Metric[1];
         com.appdynamics.extensions.redis_enterprise.config.Metric childMetric = new com.appdynamics.extensions.redis_enterprise.config.Metric();
         childMetric.setAttr("metric1");
@@ -117,7 +117,7 @@ public class ObjectMetricsCollectorSubTaskTest {
 
         Stat grandchildStat = new Stat();
         Stat[] grandchildStatArray = new Stat[1];
-        grandchildStat.setName("conns2");
+        grandchildStat.setNameElement("conns2");
         com.appdynamics.extensions.redis_enterprise.config.Metric[] childMetrics2 = new Metric[1];
         com.appdynamics.extensions.redis_enterprise.config.Metric childMetric2 = new com.appdynamics.extensions.redis_enterprise.config.Metric();
         childMetric2.setAttr("metric2");
@@ -152,10 +152,8 @@ public class ObjectMetricsCollectorSubTaskTest {
         Assert.assertTrue(objectMetricList.get(1).getMetricName().equals(childMetric.getAlias()));
         Assert.assertTrue(objectMetricList.get(2).getMetricName().equals(metric.getAlias()));
 
-        List<com.appdynamics.extensions.metrics.Metric> clusterMetriclist = pathCaptor.getAllValues().get(1);
-        Assert.assertTrue(clusterMetriclist.get(0).getMetricName().equals(metric.getAlias()));
+        List<com.appdynamics.extensions.metrics.Metric> clusterMetricList = pathCaptor.getAllValues().get(1);
+        Assert.assertTrue(clusterMetricList.get(0).getMetricName().equals(metric.getAlias()));
     }
-
-    //todo: test for when metric not present in redis
 
 }

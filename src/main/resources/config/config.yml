@@ -1,42 +1,43 @@
 #If SIM is enabled, use this metricPrefix
-metricPrefix: Custom Metrics|Redis Enterprise|
+metricPrefix: "Custom Metrics|Redis Enterprise|"
 
 # If SIM is not enabled, use this
 #Make sure to replace <COMPONENT_ID> with the appropriate one from your environment.
-#To find the <COMPONENT_ID> in your environment, please follow the screen shot https://docs.appdynamics.com/display/PRO42/Build+a+Monitoring+Extension+Using+Java
-#metricPrefix: Server|Component:10|Custom Metrics|Redis Enterprise|
+#To find the COMPONENT_ID in your environment, please follow the screen shot https://docs.appdynamics.com/display/PRO42/Build+a+Monitoring+Extension+Using+Java
+#metricPrefix: Server|Component:<COMPONENT_ID>|Custom Metrics|Redis Enterprise|
 
 
 servers:
-    - uri: 'http://127.0.0.1:8080'
-      username: 'v@ad.com' # user should have privilege in Redis Enterprise to view stats and view info
-      password: 'test'
-      encryptedPassword: ''
-      useSSL: 'false'
-      displayName: 'myCluster'
+    - uri: "http://127.0.0.1:9443"
+      username: "admin@email.com" # user should have privileges in Redis Enterprise to view stats
+      password: "test"
+      encryptedPassword: ""
+      useSSL: "false"
+      displayName: "myCluster"
 
 # more servers go here
-#    - uri: 'https://localhost:9449'
-#      username: 'test@appdynamics.com'
-#      password: 'test@123'
-#      encryptedPassword: ''
-#      useSSL: 'true'
-#      displayName: 'testClsuter'
+#    - uri: "https://localhost:9449"
+#      username: "test@appdynamics.com"
+#      password: "test@123"
+#      encryptedPassword: ""
+#      useSSL: "true"
+#      displayName: "testCluster"
 
 # supports wildcards
 objects:
-  database: ['test1','test2', 'db.*']
-  node: ['172.*']
-  shard: ['3']
+  database: ["test1","test2", "db.*"]
+  node: ["172.*"]
+  shard: ["3"]
 
-connection:
-  socketTimeout: 5000 # Read Timeout
-  connectTimeout: 5000 # Connection Timeout
-
-  sslCertCheckEnabled: true #
-  sslCipherSuites: [] # Defaults to "default".
-  sslVerifyHostname: true
-  sslProtocols: [] # If null, by default TLSv1, TLSv1.1, TLSv1.2 are supported.
+#Un-comment if SSL is required
+#connection:
+#  socketTimeout: 5000 # Read Timeout
+#  connectTimeout: 5000 # Connection Timeout
+#
+#  sslCertCheckEnabled: true #
+#  sslCipherSuites: [] # Defaults to "default".
+#  sslVerifyHostname: true
+#  sslProtocols: [] # If null, by default TLSv1, TLSv1.1, TLSv1.2 are supported.
 
 #Converting PEM to JKS https://docs.oracle.com/cd/E35976_01/server.740/es_admin/src/tadm_ssl_convert_pem_to_jks.html
   sslTrustStorePath: "/path/to/truststore.jks" # If not set, will set value from "-Dappdynamics.agent.monitors.truststore.path=/path/cacerts" if present, else will set value as <MachineAgentHome>/conf/extensions-cacerts.jks.
@@ -67,7 +68,7 @@ customDashboard:
   dashboardName: "Redis EnterPrise Monitor Dashboard"
   sslCertCheckEnabled: true
   # Update the path to the dashboard file.
-  pathToSIMDashboard: "monitors/RedisEnterpriseMonitor/CustomDashboard_Redis+Enterprise_Dashboard.json"
+  pathToSIMDashboard: "monitors/RedisEnterpriseMonitor/Redis+Enterprise+Dashboard.json"
   pathToNormalDashboard:
   periodicDashboardCheckInSeconds: 300
 
@@ -83,7 +84,7 @@ controllerInfo:
   password: "" # -Dappdynamics.agent.monitors.controller.password
   encryptedPassword: "" # -Dappdynamics.agent.monitors.controller.encryptedPassword
   accountAccessKey: "" # -Dappdynamics.agent.accountAccessKey
-  account: "customer1" # -Dappdynamics.agent.accountName
+  account: "" # -Dappdynamics.agent.accountName
   machinePath: "" # -Dappdynamics.machine.agent.hierarchyPath
   simEnabled: false # -Dappdynamics.sim.enabled
   applicationName: "" # -Dappdynamics.agent.applicationName

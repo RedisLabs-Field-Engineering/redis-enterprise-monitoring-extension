@@ -13,6 +13,7 @@ import com.appdynamics.extensions.yml.YmlReader;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +34,7 @@ import java.util.concurrent.Phaser;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 /**
@@ -72,11 +73,11 @@ public class ObjectMetricsCollectorTaskTest {
     }
 
     @Test
-    public void testObjectMetricCollection(){
+    public void whenFetchAllObjectsThenTestObjectMetricCollection(){
 
         Stat stat = new Stat();
-        stat.setName("name");
-        stat.setId("uid");
+        stat.setNameElement("name");
+        stat.setIdElement("uid");
         stat.setStatsUrl("/v1/bdbs/stats/last/");
         stat.setUrl("/v1/bdbs/");
         PowerMockito.mockStatic(HttpClientUtils.class);
@@ -101,15 +102,111 @@ public class ObjectMetricsCollectorTaskTest {
         childMetrics[0] = childMetric;
 
         stat.setMetric(childMetrics);
+        stat.setType("database");
         List<String> objectNames = new ArrayList<>();
-        objectNames.add("test");
+        objectNames.add(".*");
 
         ObjectMetricsCollectorTask objectMetricsCollectorTask = new ObjectMetricsCollectorTask("displayname", "localhost:8080", objectNames, stat, configuration, metricWriteHelper, phaser );
         objectMetricsCollectorTask.run();
 
-        //todo : assert for method calls
+        verify(metricWriteHelper, times(1)).transformAndPrintMetrics(pathCaptor.capture());
+        List<Metric> objectMetricList = pathCaptor.getAllValues().get(0);
+        Assert.assertTrue(objectMetricList.size() == 3);
     }
 
+    @Test
+    public void whenSingleRegexThenTestObjectMetricCollection(){
+
+        Stat stat = new Stat();
+        stat.setNameElement("name");
+        stat.setIdElement("uid");
+        stat.setStatsUrl("/v1/bdbs/stats/last/");
+        stat.setUrl("/v1/bdbs/");
+        PowerMockito.mockStatic(HttpClientUtils.class);
+        when(HttpClientUtils.getResponseAsJson(any(CloseableHttpClient.class), anyString(), any(Class.class))).thenAnswer(
+                new Answer() {
+                    public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+                        ObjectMapper mapper = new ObjectMapper();
+                        String url = (String) invocationOnMock.getArguments()[1];
+                        File file = null;
+                        if(url.contains("/v1/bdbs/stats/last")) {
+                            file = new File("src/test/resources/bdbs-stats.json");
+                        }
+                        else if(url.contains("/v1/bdbs/")) {
+                            file = new File("src/test/resources/objects.json");
+                        }
+                        JsonNode objectNode = mapper.readValue(file, JsonNode.class);
+                        return objectNode;
+                    }
+                });
+
+        com.appdynamics.extensions.redis_enterprise.config.Metric[] childMetrics = new Metric[1];
+        com.appdynamics.extensions.redis_enterprise.config.Metric childMetric = new com.appdynamics.extensions.redis_enterprise.config.Metric();
+        childMetric.setAttr("no_of_keys");
+        childMetric.setAlias("no_of_keys");
+        childMetrics[0] = childMetric;
+
+        stat.setMetric(childMetrics);
+        stat.setType("database");
+        List<String> objectNames = new ArrayList<>();
+        objectNames.add("redis.*");
+
+        ObjectMetricsCollectorTask objectMetricsCollectorTask = new ObjectMetricsCollectorTask("displayname", "localhost:8080", objectNames, stat, configuration, metricWriteHelper, phaser );
+        objectMetricsCollectorTask.run();
+
+        verify(metricWriteHelper, times(1)).transformAndPrintMetrics(pathCaptor.capture());
+        List<com.appdynamics.extensions.metrics.Metric> objectMetricList = pathCaptor.getAllValues().get(0);
+        Assert.assertEquals(1,  objectMetricList.size());
+        Assert.assertEquals("Custom Metrics|Redis Enterprise|displayname|database|redis-test|Status", objectMetricList.get(0).getMetricPath());
+    }
+
+    @Test
+    public void whenMultipleRegexPatternsThenTestObjectMetricCollection(){
+
+        Stat stat = new Stat();
+        stat.setNameElement("name");
+        stat.setIdElement("uid");
+        stat.setStatsUrl("/v1/bdbs/stats/last/");
+        stat.setUrl("/v1/bdbs/");
+        PowerMockito.mockStatic(HttpClientUtils.class);
+        when(HttpClientUtils.getResponseAsJson(any(CloseableHttpClient.class), anyString(), any(Class.class))).thenAnswer(
+                new Answer() {
+                    public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+                        ObjectMapper mapper = new ObjectMapper();
+                        String url = (String) invocationOnMock.getArguments()[1];
+                        File file = null;
+                        if(url.contains("/v1/bdbs/stats/last")) {
+                            file = new File("src/test/resources/bdbs-stats.json");
+                        }
+                        else if(url.contains("bdbs")) {
+                            file = new File("src/test/resources/objects.json");
+                        }
+                        JsonNode objectNode = mapper.readValue(file, JsonNode.class);
+                        return objectNode;
+                    }
+                });
+
+        com.appdynamics.extensions.redis_enterprise.config.Metric[] childMetrics = new Metric[1];
+        com.appdynamics.extensions.redis_enterprise.config.Metric childMetric = new com.appdynamics.extensions.redis_enterprise.config.Metric();
+        childMetric.setAttr("metric1");
+        childMetric.setAlias("metric1");
+        childMetrics[0] = childMetric;
+
+        stat.setMetric(childMetrics);
+        stat.setType("database");
+        List<String> objectNames = new ArrayList<>();
+        objectNames.add("redis.*");
+        objectNames.add(".*test");
+
+        ObjectMetricsCollectorTask objectMetricsCollectorTask = new ObjectMetricsCollectorTask("displayname", "localhost:8080", objectNames, stat, configuration, metricWriteHelper, phaser );
+        objectMetricsCollectorTask.run();
+
+        verify(metricWriteHelper, times(1)).transformAndPrintMetrics(pathCaptor.capture());
+        List<com.appdynamics.extensions.metrics.Metric> objectMetricList = pathCaptor.getAllValues().get(0);
+        Assert.assertTrue(objectMetricList.size() == 2);
+        Assert.assertEquals("Custom Metrics|Redis Enterprise|displayname|database|test|Status", objectMetricList.get(0).getMetricPath());
+        Assert.assertEquals("Custom Metrics|Redis Enterprise|displayname|database|redis-test|Status", objectMetricList.get(1).getMetricPath());
+    }
 
 
 }
