@@ -1,8 +1,8 @@
 ## AppDynamics Monitoring Extension for Redis Enterprise
 ------------------------------------------------------------
-[Redis Enterprise Software](https://docs.redislabs.com/latest/rs/) is from Redis Labs which enhances the open source Redis with  multiple deployment choices (public and private clouds, on-premises, hybrid, RAM-Flash combination), toplogy and support for very large dataset sizes.The AppDynamics Monitoring Extension for Redis Enterprise will collect metrics from Redis Enterprise clusters and send them to AppDynamics Controller.
 
 ## Use Case
+[Redis Enterprise Software](https://docs.redislabs.com/latest/rs/) is from Redis Labs which enhances the open-source Redis with multiple deployment choices (public and private clouds, on-premises, hybrid, RAM-Flash combination), topology and support for very large data-set sizes. The AppDynamics Monitoring Extension for Redis Enterprise will collect metrics from Redis Enterprise clusters and send them to AppDynamics Controller.
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@ Please do not proceed with the extension installation if the specified prerequis
 1. Download and unzip the RedisEnterpriseMonitor-1.0.0.zip to the "<MachineAgent_Dir>/monitors" directory
 2. Please place the extension in the "monitors" directory of your Machine Agent installation directory. 
    Do not place the extension in the "extensions" directory of your Machine Agent installation directory.
-3. Configure the extension by referring to the below section. The metricPrefix of the extension has to be configured as 
+3. Configure the extension by referring to the section listed below. The metricPrefix of the extension has to be configured as 
    specified [here](https://community.appdynamics.com/t5/Knowledge-Base/How-do-I-troubleshoot-missing-custom-metrics-or-extensions/ta-p/28695#Configuring%20an%20Extension). 
    Please make sure that the right metricPrefix is chosen based on your machine agent deployment, otherwise this could lead to metrics not being visible in the controller.
 4. Restart the machine agent.
@@ -23,14 +23,12 @@ Please do not proceed with the extension installation if the specified prerequis
    or have an agent on the same machine running the product in order for the extension to collect and send the metrics.
 
 
-Please make sure to place the extension in the **"monitors"** directory of your **Machine Agent** installation directory. Do not place the extension in the **"extensions"** directory of your **Machine Agent** installation directory.
-
 ## Configuration 
 In order to use this extension, the following files need to be configured - config.yml and metrics.xml. Here's how to configure those files. 
 
 ### Config.yml
 * Configure the RedisEnterprise monitoring extension by editing the config.yml file in `<MACHINE_AGENT_HOME>/monitors/RedisEnterprise/`
-* Enter the cluster endpoint you are monitoring in the `servers` section of the config.yml. The can be configured to collect metrics from the cluster along with all nodes, databases, and shards in the cluster.
+* Enter the cluster endpoint you are monitoring in the `servers` section of the config.yml. This can be configured to collect metrics from the cluster along with all nodes, databases, and shards in the cluster.
 * Configure the RedisEnterprise instances by specifying the URI(required), username(required), password(required) of the RedisEnterprise account, 
 encryptedPassword(only if password encryption required), proxy(optional), useSSL(set to true if SSL is required). If SSL is required, please configure the `connection` section.
 ```
@@ -92,7 +90,7 @@ The following metrics are reported under each `cluster` name:
 Free Memory 
 Available Memory 
 Provisional Memory 
-Available Flash multiplier=9.54e-7 
+Available Flash 
 Provisional Flash 
 Cpu Time - User 
 Cpu Time - System 
@@ -181,11 +179,11 @@ The following metrics are reported under `node` section:
 Free Memory 
 Available Memory 
 Provisional Memory 
-Available Flash multiplier=9.54e-7 
+Available Flash
 Provisional Flash 
-Cpu Time - User multiplier= 100 
-Cpu Time - System multiplier= 100 
-Cpu Idle Time multiplier= 100 
+Cpu Time - User  
+Cpu Time - System 
+Cpu Idle Time 
 Available Ephemeral Disk Space 
 Available Persistent Storage 
 Ephemeral Storage - Free 
@@ -294,7 +292,7 @@ Workbench is an in-built feature provided with each extension in order to assist
 ```
     curl -u "youremail@example.com:yourRedisEnterprisePassword" https://your.redis.cluster.endpoint/v1/cluster
 ```
-If your cluster is set-up over SSL, please use the --cacert option to specify your keys. 
+If your cluster is set-up over SSL, please use the `--cacert` option to specify your keys. 
 Usually the endpoint is of the format: 
 
 ```
@@ -322,7 +320,7 @@ If after going through the Troubleshooting Document you have not been able to ge
 For any support related questions, you can also contact help@appdynamics.com.
 
 ## Contributing
-Always feel free to fork and contribute any changes directly via [GitHub](https://github.com/Appdynamics/RedisEnterprise-monitoring-extension).
+Always feel free to fork and contribute any changes directly via [GitHub](https://github.com/Appdynamics/redis-enterprise-monitoring-extension).
 
 ## Version
 | Name                        |  Version                    | 
@@ -331,5 +329,5 @@ Always feel free to fork and contribute any changes directly via [GitHub](https:
 | Controller Compatibility:   | 2.2 or Later                |
 | Tested On:                  | Redis Enterprise Software v5.4.x       |
 | Operating System Tested On: | Mac OS, Linux               |
-| Last updated On:            | Dec 9, 2019          |
-| List of changes to this extension| [Change log](https://github.com/Appdynamics/RedisEnterprise-monitoring-extension/blob/master/CHANGELOG.md)
+| Last updated On:            | Dec 13, 2019          |
+| List of changes to this extension| [Change log](https://github.com/Appdynamics/redis-enterprise-monitoring-extension/blob/master/CHANGELOG.md)
