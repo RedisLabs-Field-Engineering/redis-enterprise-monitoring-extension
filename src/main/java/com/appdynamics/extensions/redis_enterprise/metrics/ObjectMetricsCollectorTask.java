@@ -7,11 +7,11 @@ import com.appdynamics.extensions.logging.ExtensionsLoggerFactory;
 import com.appdynamics.extensions.metrics.Metric;
 import com.appdynamics.extensions.redis_enterprise.config.Stat;
 import com.appdynamics.extensions.util.JsonUtils;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ArrayNode;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
@@ -155,7 +155,7 @@ public class ObjectMetricsCollectorTask implements  Runnable {
                 if( isActive(objectName, jsonNode, statType)){
                     if(jsonNode.get(idElement) != null) {
                         String id = jsonNode.get(idElement).isTextual() ?
-                                jsonNode.get(idElement).getTextValue() : jsonNode.get(idElement).toString();
+                                jsonNode.get(idElement).textValue() : jsonNode.get(idElement).toString();
                         idToName.put(id, objectName);
                     }
                     else{
@@ -179,7 +179,7 @@ public class ObjectMetricsCollectorTask implements  Runnable {
      *@return value of the key field
      */
     private String extractValueFromJson (String key, JsonNode jsonNode) {
-        return jsonNode.get(key).getTextValue();
+        return jsonNode.get(key).textValue();
     }
 
     /**
