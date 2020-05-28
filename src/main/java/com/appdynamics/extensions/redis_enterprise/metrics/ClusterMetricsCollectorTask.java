@@ -1,14 +1,13 @@
 package com.appdynamics.extensions.redis_enterprise.metrics;
-import com.appdynamics.extensions.AMonitorTaskRunnable;
+
 import com.appdynamics.extensions.MetricWriteHelper;
 import com.appdynamics.extensions.conf.MonitorContextConfiguration;
 import com.appdynamics.extensions.http.HttpClientUtils;
 import com.appdynamics.extensions.logging.ExtensionsLoggerFactory;
 import com.appdynamics.extensions.metrics.Metric;
-import com.appdynamics.extensions.redis_enterprise.RedisEnterpriseMonitorTask;
 import com.appdynamics.extensions.redis_enterprise.config.Stat;
 import com.appdynamics.extensions.redis_enterprise.config.Stats;
-import org.codehaus.jackson.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 
 import java.util.List;

@@ -1,4 +1,5 @@
 package com.appdynamics.extensions.redis_enterprise.metrics;
+
 import com.appdynamics.extensions.ABaseMonitor;
 import com.appdynamics.extensions.MetricWriteHelper;
 import com.appdynamics.extensions.conf.MonitorContext;
@@ -10,9 +11,9 @@ import com.appdynamics.extensions.redis_enterprise.config.Metric;
 import com.appdynamics.extensions.redis_enterprise.config.Stat;
 import com.appdynamics.extensions.util.MetricPathUtils;
 import com.appdynamics.extensions.yml.YmlReader;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
