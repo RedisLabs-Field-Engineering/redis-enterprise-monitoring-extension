@@ -11,7 +11,7 @@ Please do not proceed with the extension installation if the specified prerequis
 
 ## Installation
 
-1. Download and unzip the RedisEnterpriseMonitor-1.0.0.zip to the "<MachineAgent_Dir>/monitors" directory
+1. Download and unzip the RedisEnterpriseMonitor-1.0.2.zip to the "<MachineAgent_Dir>/monitors" directory
 2. Please place the extension in the "monitors" directory of your Machine Agent installation directory. 
    Do not place the extension in the "extensions" directory of your Machine Agent installation directory.
 3. Configure the extension by referring to the section listed below. The metricPrefix of the extension has to be configured as 
@@ -325,7 +325,7 @@ Always feel free to fork and contribute any changes directly via [GitHub](https:
 ## Version
 | Name                        |  Version                    | 
 | :---------------------------| :---------------------------|
-| Extension Version:          | 1.0.1                  |
+| Extension Version:          | 1.0.2                  |
 | Controller Compatibility:   | 2.2 or Later                |
 | Tested On:                  | Redis Enterprise Software v5.4.x       |
 | Operating System Tested On: | Mac OS, Linux               |
